@@ -1,0 +1,12 @@
+.ant-input-number {
+  width: 100%;
+}
+.approval-warp {
+  border: 1px solid #eee;
+  margin-top: 20px;
+}
+.approval-warp .ant-col {
+  padding: 5px;
+  border: 1px solid #eee;
+  min-height: 34px;
+}

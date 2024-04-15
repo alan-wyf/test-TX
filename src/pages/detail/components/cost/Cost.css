@@ -1,0 +1,12 @@
+.cost-warp .ant-empty {
+  display: none;
+}
+.cost-warp .ant-select {
+  width: 170px;
+}
+.cost-item-row {
+  padding: 0 12px;
+}
+.cost-item-row .ant-col{
+  margin: 8px 0;
+}
