@@ -56,7 +56,7 @@ export default function Detail() {
     chargePersonPhone: "",
     orderNumber: "",
     isInputVehicle: "",
-    investmentExhibitionDetailNumber: ""
+    investmentExhibitionDetailNumber: "",
   });
   const [checkedFrom, setCheckedFrom] = useState(false);
   const [currIndex, setCurrIndex] = useState("1");
@@ -74,6 +74,9 @@ export default function Detail() {
       if (res.data.orderNumber) getData(res.data.orderNumber);
     }
   };
+  useEffect(() => {
+    getDetail();
+  }, []);
   const getData = async (data) => {
     const res = await getProjectData(data);
     if (res.code === 200) {
@@ -109,9 +112,6 @@ export default function Detail() {
       }
     }
   };
-  useEffect(() => {
-    getDetail();
-  }, [JSON.stringify(goodsInfo)]);
   const onTabChange = (key) => {
     setCurrIndex(key);
   };
@@ -164,7 +164,8 @@ export default function Detail() {
     }
     const data = {
       baseInfoDTO: {
-        investmentExhibitionDetailNumber: goodsInfo.investmentExhibitionDetailNumber,
+        investmentExhibitionDetailNumber:
+          goodsInfo.investmentExhibitionDetailNumber,
         projectCode: goodsInfo.projectNumber,
         orderNumber: goodsInfo.orderNumber,
         id: dataForm.baseInfoVO === null ? "" : dataForm.baseInfoVO.id,
@@ -248,7 +249,8 @@ export default function Detail() {
     }
     const data = {
       baseInfoDTO: {
-        investmentExhibitionDetailNumber: goodsInfo.investmentExhibitionDetailNumber,
+        investmentExhibitionDetailNumber:
+          goodsInfo.investmentExhibitionDetailNumber,
         projectCode: goodsInfo.projectNumber,
         orderNumber: goodsInfo.orderNumber,
         id: dataForm.baseInfoVO === null ? "" : dataForm.baseInfoVO.id,

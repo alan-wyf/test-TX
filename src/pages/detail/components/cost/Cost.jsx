@@ -310,7 +310,11 @@ export default function Cost(props) {
             : 1);
         dueFee += dataSubmitSource[i].totalCost;
         dueDeposit += dataSubmitSource[i].totalDepositAmount;
-        if (typeof dataSubmitSource[i].materialName === "string") continue;
+        if (
+          typeof dataSubmitSource[i].materialName === "string" &&
+          dataSubmitSource[i].materialName === null
+        )
+          continue;
         dataSubmitSource[i].materialName = dataSubmitSource[i].materialName.id;
       }
       if (
@@ -369,27 +373,27 @@ export default function Cost(props) {
     setDataSource(newData);
     onFormChange();
   };
-  const onBeginTimeChange = (data, dateString, index) => {
-    dataSource[index].startTime = dateString;
-    if (
-      dataSource[index].endTime &&
-      new Date(dataSource[index].startTime).getTime() <
-        new Date(dataSource[index].endTime).getTime()
-    ) {
-      dataSource[index].duration = hourTimeValue(
-        dataSource[index].startTime,
-        dataSource[index].endTime
-      );
-      dataSource[index].totalCost =
-        Number(dataSource[index].quantity) *
-        Number(dataSource[index].unitPrice) *
-        (Number(dataSource[index].duration)
-          ? Number(dataSource[index].duration)
-          : 1);
-    }
-    setDataSource([...dataSource]);
-    onFormChange();
-  };
+  // const onBeginTimeChange = (data, dateString, index) => {
+  //   dataSource[index].startTime = dateString;
+  //   if (
+  //     dataSource[index].endTime &&
+  //     new Date(dataSource[index].startTime).getTime() <
+  //       new Date(dataSource[index].endTime).getTime()
+  //   ) {
+  //     dataSource[index].duration = hourTimeValue(
+  //       dataSource[index].startTime,
+  //       dataSource[index].endTime
+  //     );
+  //     dataSource[index].totalCost =
+  //       Number(dataSource[index].quantity) *
+  //       Number(dataSource[index].unitPrice) *
+  //       (Number(dataSource[index].duration)
+  //         ? Number(dataSource[index].duration)
+  //         : 1);
+  //   }
+  //   setDataSource([...dataSource]);
+  //   onFormChange();
+  // };
   const onTimeChange = (data, dateString, index) => {
     dataSource[index].startTime = dateString[0];
     dataSource[index].endTime = dateString[1];
@@ -406,27 +410,27 @@ export default function Cost(props) {
     setDataSource([...dataSource]);
     onFormChange();
   };
-  const onEndTimeChange = (data, dateString, index) => {
-    dataSource[index].endTime = dateString;
-    if (
-      dataSource[index].startTime &&
-      new Date(dataSource[index].startTime).getTime() <
-        new Date(dataSource[index].endTime).getTime()
-    ) {
-      dataSource[index].duration = hourTimeValue(
-        dataSource[index].startTime,
-        dataSource[index].endTime
-      );
-      dataSource[index].totalCost =
-        Number(dataSource[index].quantity) *
-        Number(dataSource[index].unitPrice) *
-        (Number(dataSource[index].duration)
-          ? Number(dataSource[index].duration)
-          : 1);
-    }
-    setDataSource([...dataSource]);
-    onFormChange();
-  };
+  // const onEndTimeChange = (data, dateString, index) => {
+  //   dataSource[index].endTime = dateString;
+  //   if (
+  //     dataSource[index].startTime &&
+  //     new Date(dataSource[index].startTime).getTime() <
+  //       new Date(dataSource[index].endTime).getTime()
+  //   ) {
+  //     dataSource[index].duration = hourTimeValue(
+  //       dataSource[index].startTime,
+  //       dataSource[index].endTime
+  //     );
+  //     dataSource[index].totalCost =
+  //       Number(dataSource[index].quantity) *
+  //       Number(dataSource[index].unitPrice) *
+  //       (Number(dataSource[index].duration)
+  //         ? Number(dataSource[index].duration)
+  //         : 1);
+  //   }
+  //   setDataSource([...dataSource]);
+  //   onFormChange();
+  // };
   const onRemarksChange = (e, index) => {
     dataSource[index].remarks = e.target.value;
     setDataSource([...dataSource]);
@@ -807,7 +811,8 @@ export default function Cost(props) {
     const data = {
       id: dataForm.collectFeeVO.id,
       orderNumber: goodsInfo.orderNumber,
-      investmentExhibitionDetailNumber: goodsInfo.investmentExhibitionDetailNumber,
+      investmentExhibitionDetailNumber:
+        goodsInfo.investmentExhibitionDetailNumber,
       collectFeeDTOList,
       changeChargeSheet: "y",
       attachment: costForm.getFieldValue("attachment"),

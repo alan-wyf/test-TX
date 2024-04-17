@@ -1,7 +1,7 @@
 "use client";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Upload } from "antd";
+import { Button, Col, Form, Row, Upload, message } from "antd";
 import { getBaseUrl } from "../../../../config";
 import { approvalStatusToChinese } from "../../../../util/util";
 const normFile = (e) => {
@@ -10,10 +10,19 @@ const normFile = (e) => {
   }
   let list = [];
   for (const item of e?.fileList) {
-    if (item.status === "done" && !("id" in item)) {
-      const uploadData = item.response.data;
-      uploadData.uid = uploadData.id;
-      list.push(uploadData);
+    if (item.status === "done") {
+      if ("response" in item) {
+        if (item.response.code !== 200) {
+          item.status = "error";
+          message.error(item.response.msg);
+          continue;
+        }
+        const uploadData = item.response.data;
+        uploadData.uid = uploadData.id;
+        list.push(uploadData);
+      } else {
+        list.push(item);
+      }
     }
     if ("id" in item) {
       list.push(item);
@@ -73,16 +82,21 @@ export default function Prove(props) {
       for (const item of info.fileList) {
         if (item.status === "done") {
           if ("response" in item) {
+            if (item.response.code !== 200) {
+              item.status = "error";
+              message.error(item.response.msg);
+              continue;
+            }
             const uploadData = item.response.data;
             uploadData.uid = uploadData.id;
             list.push(uploadData);
           } else {
             list.push(item);
           }
+          proveForm.setFieldValue(name, proveForm.getFieldValue(name));
+          onValuesChange();
         }
       }
-      proveForm.setFieldValue(name, proveForm.getFieldValue(name));
-      onValuesChange();
     }
   };
   if (!isShow) return;
@@ -90,6 +104,7 @@ export default function Prove(props) {
     <Form
       disabled={
         goodsInfo.auditStatus === "1" ||
+        goodsInfo.auditStatus === "3" ||
         (goodsInfo.auditStatus === "2" &&
           dataForm.baseInfoVO !== null &&
           dataForm.baseInfoVO.approvalStatus === "approve")

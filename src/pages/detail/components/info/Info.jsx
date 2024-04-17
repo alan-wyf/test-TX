@@ -52,6 +52,7 @@ export default function Info(props) {
     <Form
       disabled={
         goodsInfo.auditStatus === "1" ||
+        goodsInfo.auditStatus === "3" ||
         (goodsInfo.auditStatus === "2" &&
           dataForm.baseInfoVO !== null &&
           dataForm.baseInfoVO.approvalStatus === "approve")
