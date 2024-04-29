@@ -100,7 +100,7 @@ const EditableCell = ({
       const values = await form.validateFields();
       if (dataIndex === "materialName") {
         const res = await getMaterialInfo(form.getFieldValue(dataIndex));
-        if (res.code === 200) {
+        if (res && res.code === 200) {
           values.feeCategory = res.data.feeCategory;
           values.specification = res.data.specification;
           values.unit = res.data.unit;
@@ -361,7 +361,7 @@ export default function Cost(props) {
     const data = goodsInfo.projectNumber;
     if (!data) return;
     const res = await getMaterialList(data);
-    if (res.code === 200) {
+    if (res && res.code === 200) {
       setMaterialList(res.data);
     }
   };
@@ -820,7 +820,7 @@ export default function Cost(props) {
       totalCost: dueFee,
     };
     const res = await postUpdateCollectFee(data);
-    if (res.code === 200) {
+    if (res && res.code === 200) {
       message.success("提交成功");
     }
   };

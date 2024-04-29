@@ -39,11 +39,25 @@
   margin-bottom: 32px;
   font-size: 16px;
 }
+.login-warp .login-warp-right .form-warp .form-flex-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.login-warp .login-warp-right .form-warp .form-flex-item .form-input {
+  flex: 1;
+  margin-right: 20px;
+}
 .login-warp .login-warp-right .form-warp .form-input {
   background-color: #f5f6f7;
   height: 54px;
   font-size: 16px;
   border: none;
+}
+.login-warp .login-warp-right .form-warp .form-btn {
+  height: 54px;
+  font-size: 14px;
+  width: 120px;
 }
 .login-warp .login-warp-right .form-warp .form-tip {
   color: #646a73;

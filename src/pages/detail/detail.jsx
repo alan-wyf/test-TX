@@ -69,7 +69,7 @@ export default function Detail() {
   const getDetail = async () => {
     if (id === "nodata") navigate("/index", { replace: true });
     const res = await getProjectDetail(id);
-    if (res.code === 200) {
+    if (res && res.code === 200) {
       setGoodsInfo(res.data);
       if (res.data.orderNumber) getData(res.data.orderNumber);
     }
@@ -79,7 +79,7 @@ export default function Detail() {
   }, []);
   const getData = async (data) => {
     const res = await getProjectData(data);
-    if (res.code === 200) {
+    if (res && res.code === 200) {
       const dataForm = res.data;
       setDataForm(dataForm);
       if (dataForm.baseInfoVO !== null) {
@@ -185,7 +185,7 @@ export default function Detail() {
       vehicleAccessDTOList: carForm,
     };
     const res = await postSave(data);
-    if (res.code === 200) {
+    if (res && res.code === 200) {
       message.success("保存成功");
     }
   };
@@ -270,7 +270,7 @@ export default function Detail() {
       vehicleAccessDTOList: carForm,
     };
     const res = await postSubmit(data);
-    if (res.code === 200) {
+    if (res && res.code === 200) {
       message.success("提交成功");
       getDetail();
     }

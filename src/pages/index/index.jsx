@@ -57,6 +57,12 @@ const columns = [
     },
   },
   {
+    title: "邀请码",
+    dataIndex: "invitationCode",
+    key: "invitationCode",
+    ellipsis: true,
+  },
+  {
     title: "操作",
     key: "action",
     render: (_, record) => {
@@ -113,7 +119,7 @@ export default function Index() {
           setLoading(false);
           message.error("获取数据失败")
         }else{
-          if (res.code === 200) {
+          if (res && res.code === 200) {
             setData(res.data);
             setLoading(false);
           } else {
@@ -177,7 +183,7 @@ export default function Index() {
         invitationCode: code,
       };
       const res = await postInviteCode(data);
-      if (res.code === 200) {
+      if (res && res.code === 200) {
         setIsAddModalOpen(false);
         setAddGoodsErrMsg("");
         fetchData();

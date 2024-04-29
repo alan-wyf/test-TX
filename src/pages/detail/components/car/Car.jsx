@@ -251,7 +251,7 @@ export default function Car(props) {
   }, [props.check]);
   const handleVehiclesList = async () => {
     const res = await getVehiclesList();
-    if (res.code === 200) {
+    if (res && res.code === 200) {
       setVehiclesList(res.data);
     }
   };
@@ -327,6 +327,7 @@ export default function Car(props) {
     {
       title: "车牌号",
       width: 230,
+      type: 'input',
       dataIndex: "licensePlateNumber",
       render: (_, record, index) => (
         <Input
@@ -338,6 +339,7 @@ export default function Car(props) {
     {
       title: "操作",
       dataIndex: "operation",
+      type: 'none',
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm
@@ -376,16 +378,19 @@ export default function Car(props) {
     {
       title: "自卸数量",
       width: 150,
+      type: "num",
       dataIndex: "unloadQuantity",
     },
     {
       title: "叉吊车卸货数量",
       width: 150,
+      type: "num",
       dataIndex: "forkliftUnloadQuantity",
     },
     {
       title: "车牌号",
       width: 230,
+      type: "input",
       dataIndex: "licensePlateNumber",
     },
     // {

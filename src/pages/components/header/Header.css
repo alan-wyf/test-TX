@@ -14,6 +14,7 @@
   font-weight: bold;
 }
 .header-warp .login-out-btn{
+  font-size: 14px;
   cursor: pointer;
   padding: 5px 10px;
   margin-right: -10px;
