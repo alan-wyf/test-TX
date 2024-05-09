@@ -89,11 +89,15 @@ export default function Prove(props) {
             }
             const uploadData = item.response.data;
             uploadData.uid = uploadData.id;
-            list.push(uploadData);
+            if(JSON.stringify(list).indexOf(uploadData.uid) === -1) list.push(uploadData);
           } else {
-            list.push(item);
+            if(JSON.stringify(list).indexOf(item.uid) === -1) list.push(item);
           }
-          proveForm.setFieldValue(name, proveForm.getFieldValue(name));
+          const newList = []
+          for(const item of proveForm.getFieldValue(name)){
+            if(JSON.stringify(newList).indexOf(item.uid) === -1) newList.push(item);
+          }
+          proveForm.setFieldValue(name, newList);
           onValuesChange();
         }
       }

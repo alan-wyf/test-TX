@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import "./login.css";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input } from "antd";
 import { postLogin, postRegister } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import loginTitle from "../../image/logo.png";

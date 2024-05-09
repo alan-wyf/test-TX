@@ -66,6 +66,34 @@ export default function Info(props) {
       <Row gutter={24}>
         <Col span={8}>
           <Form.Item
+            name="supervisorNameTwo"
+            label="施工总负责人姓名"
+            rules={[
+              {
+                required: true,
+                message: "施工总负责人姓名不能为空",
+              },
+            ]}
+          >
+            <InputNumber placeholder="请输入" />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            name="supervisorContactTwo"
+            label="施工总负责人联系方式"
+            rules={[
+              {
+                required: true,
+                message: "施工总负责人联系方式不能为空",
+              },
+            ]}
+          >
+            <InputNumber placeholder="请输入" />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
             name="boothArea"
             label="展位面积"
             rules={[

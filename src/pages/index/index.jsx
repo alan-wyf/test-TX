@@ -4,7 +4,14 @@ import { Link } from "react-router-dom";
 import "./index.css";
 import { Button, Input, Modal, Table, message } from "antd";
 import { postInviteCode, postProjectList } from "../../api/api";
+import { getBaseUrl } from "../../config";
 import Header from "../components/header/Header";
+
+const onloadFile = (url) => {
+  let link = document.createElement("a");
+  link.href = url;
+  link.click();
+};
 
 const columns = [
   {
@@ -65,6 +72,7 @@ const columns = [
   {
     title: "操作",
     key: "action",
+    width: 240,
     render: (_, record) => {
       if (record.auditStatus === "0" || record.auditStatus === "2") {
         return (
@@ -72,6 +80,16 @@ const columns = [
             <Link to={`/detail?id=` + record.investmentExhibitionDetailNumber}>
               提交资料
             </Link>
+            <Button
+              type="link"
+              onClick={() =>
+                onloadFile(
+                  getBaseUrl().baseURL + `project/down/${record.projectNumber}`
+                )
+              }
+            >
+              报馆相关资料下载
+            </Button>
           </div>
         );
       } else {
@@ -80,6 +98,16 @@ const columns = [
             <Link to={`/detail?id=` + record.investmentExhibitionDetailNumber}>
               详情
             </Link>
+            <Button
+              type="link"
+              onClick={() =>
+                onloadFile(
+                  getBaseUrl().baseURL + `project/down/${record.projectNumber}`
+                )
+              }
+            >
+              报馆相关资料下载
+            </Button>
           </div>
         );
       }
@@ -115,10 +143,10 @@ export default function Index() {
     };
     await postProjectList(data)
       .then((res) => {
-        if(!res){
+        if (!res) {
           setLoading(false);
-          message.error("获取数据失败")
-        }else{
+          message.error("获取数据失败");
+        } else {
           if (res && res.code === 200) {
             setData(res.data);
             setLoading(false);

@@ -4,7 +4,7 @@ import { message } from 'antd'
 
 let baseUrl = 'http://120.78.191.169:8088/' // 线上
 
-// baseUrl = 'http://192.168.110.217:8088/' // 双全-本地环境
+// baseUrl = 'http://192.168.110.226:8088/' // 双全-本地环境
 
 // baseUrl = 'http://192.168.110.206:8088/' // 任其-本地环境
 
@@ -40,7 +40,6 @@ axios.interceptors.response.use(
     // token过期
     if (code === 401) {
       localStorage.clear()
-      console.log(window.location);
       // navigate("/", { replace: true });
       window.location.pathname = ""
       return response.data
@@ -174,38 +173,6 @@ export function put(url, data = {}) {
     )
   })
 }
-
-//统一接口处理，返回数据
-// export default function (fetch, url, param) {
-//   // let _data = ''
-//   return new Promise((resolve, reject) => {
-//     switch (fetch) {
-//       case 'get':
-//         console.log('begin a get request,and url:', url)
-//         get(url, param)
-//           .then(function (response) {
-//             resolve(response)
-//           })
-//           .catch(function (error) {
-//             console.log('get request GET failed.', error)
-//             reject(error)
-//           })
-//         break
-//       case 'post':
-//         post(url, param)
-//           .then(function (response) {
-//             resolve(response)
-//           })
-//           .catch(function (error) {
-//             console.log('get request POST failed.', error)
-//             reject(error)
-//           })
-//         break
-//       default:
-//         break
-//     }
-//   })
-// }
 
 //失败提示
 function msg(err) {
