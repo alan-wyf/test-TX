@@ -75,7 +75,7 @@ export default function Info(props) {
               },
             ]}
           >
-            <InputNumber placeholder="请输入" />
+            <Input placeholder="请输入" />
           </Form.Item>
         </Col>
         <Col span={8}>
@@ -89,7 +89,7 @@ export default function Info(props) {
               },
             ]}
           >
-            <InputNumber placeholder="请输入" />
+            <Input placeholder="请输入" />
           </Form.Item>
         </Col>
         <Col span={8}>

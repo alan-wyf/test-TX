@@ -233,6 +233,7 @@ export default function Car(props) {
   useEffect(() => {
     setData();
   }, [props.setDataForm]);
+
   const checkedForm = () => {
     if (goodsInfo.isInputVehicle === "y") {
       if (dataSource.length) {
@@ -249,6 +250,7 @@ export default function Car(props) {
       checkedForm();
     }
   }, [props.check]);
+
   const handleVehiclesList = async () => {
     const res = await getVehiclesList();
     if (res && res.code === 200) {
