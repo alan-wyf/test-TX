@@ -52,8 +52,15 @@ const EditableCell = ({
   const timeRef = useRef(null);
   const form = useContext(EditableContext);
   useEffect(() => {
-    if (editing && type !== "select" && type !== "time") {
-      inputRef.current.focus();
+    if (editing && type !== "time") {
+      switch (type) {
+        case "select":
+          selectRef.current.focus();
+          break;
+        default:
+          inputRef.current.focus();
+          break;
+      }
     }
   }, [editing]);
   const toggleEdit = () => {
@@ -217,7 +224,7 @@ export default function Car(props) {
   const goodsInfo = props.goodsInfo;
   const [dataSource, setDataSource] = useState([]);
   const [count, setCount] = useState(0);
-  const [vehiclesList, setVehiclesList] = useState([]);
+  const vehiclesList = props.getVehiclesList;
   const dataForm = props.setDataForm;
   const setData = () => {
     if (dataForm.vehicleAccessVO === null) return;
@@ -231,7 +238,7 @@ export default function Car(props) {
     setDataSource([...vehicleAccessListVO]);
   };
   useEffect(() => {
-    setData();
+    if (dataForm.vehicleAccessVO !== null) setData();
   }, [props.setDataForm]);
 
   const checkedForm = () => {
@@ -251,15 +258,15 @@ export default function Car(props) {
     }
   }, [props.check]);
 
-  const handleVehiclesList = async () => {
-    const res = await getVehiclesList();
-    if (res && res.code === 200) {
-      setVehiclesList(res.data);
-    }
-  };
-  useEffect(() => {
-    handleVehiclesList();
-  }, []);
+  // const handleVehiclesList = async () => {
+  //   const res = await getVehiclesList();
+  //   if (res && res.code === 200) {
+  //     setVehiclesList(res.data);
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleVehiclesList();
+  // }, []);
   const handleDelete = (key) => {
     const newData = dataSource.filter((item) => item.key !== key);
     setDataSource(newData);
@@ -329,7 +336,7 @@ export default function Car(props) {
     {
       title: "车牌号",
       width: 230,
-      type: 'input',
+      type: "input",
       dataIndex: "licensePlateNumber",
       render: (_, record, index) => (
         <Input
@@ -341,7 +348,8 @@ export default function Car(props) {
     {
       title: "操作",
       dataIndex: "operation",
-      type: 'none',
+      type: "none",
+      fixed: "right",
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm
@@ -423,6 +431,7 @@ export default function Car(props) {
     onFormChange();
   };
   const handleSave = (row) => {
+    console.log(row);
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
@@ -430,8 +439,8 @@ export default function Car(props) {
       ...item,
       ...row,
     });
-    setDataSource(newData);
-    onFormChange();
+    setDataSource([...newData]);
+    onFormChange(newData);
   };
   const components = {
     body: {
@@ -456,9 +465,8 @@ export default function Car(props) {
       }),
     };
   });
-  const onFormChange = () => {
-    // console.log(dataSource);
-    props.carForm(dataSource);
+  const onFormChange = (data) => {
+    props.carForm(data);
     // props.changeCheck(false);
   };
   return (

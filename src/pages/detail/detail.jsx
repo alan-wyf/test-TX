@@ -1,12 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import "./detail.css";
-import { Breadcrumb, Tabs, Row, Col, Button, Space, message } from "antd";
+import { Breadcrumb, Tabs, Row, Col, Button, Space, message, Spin } from "antd";
 import {
   getProjectDetail,
   getProjectData,
   postSave,
   postSubmit,
+  getMaterialList,
+  getVehiclesList,
 } from "../../api/api";
 import {
   checkedInfoForm,
@@ -39,10 +41,13 @@ export default function Detail() {
     collectFeeVO: null,
     vehicleAccessVO: null,
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [infoForm, setInfoFrom] = useState(null);
   const [proveForm, setProveForm] = useState(null);
   const [costForm, setCostForm] = useState(null);
   const [carForm, setCarForm] = useState(null);
+  const [materialList, setMaterialList] = useState([]);
+  const [vehiclesList, setVehiclesList] = useState([]);
   const [goodsInfo, setGoodsInfo] = useState({
     projectName: "",
     brandName: "",
@@ -71,7 +76,13 @@ export default function Detail() {
     const res = await getProjectDetail(id);
     if (res && res.code === 200) {
       setGoodsInfo(res.data);
-      if (res.data.orderNumber) getData(res.data.orderNumber);
+      if (res.data.projectNumber) handleMaterialList(res.data.projectNumber);
+      if (res.data.orderNumber) {
+        getData(res.data.orderNumber);
+        handleVehiclesList();
+      } else {
+        setIsLoading(false);
+      }
     }
   };
   useEffect(() => {
@@ -110,6 +121,19 @@ export default function Detail() {
           dataForm.vehicleAccessVO.vehicleAccessForm.vehicleAccessListVO;
         setCarForm([...vehicleAccessListVO]);
       }
+    }
+    setIsLoading(false);
+  };
+  const handleMaterialList = async (data) => {
+    const res = await getMaterialList(data);
+    if (res && res.code === 200) {
+      setMaterialList(res.data);
+    }
+  };
+  const handleVehiclesList = async () => {
+    const res = await getVehiclesList();
+    if (res && res.code === 200) {
+      setVehiclesList(res.data);
     }
   };
   const onTabChange = (key) => {
@@ -331,6 +355,7 @@ export default function Detail() {
           setDataForm={dataForm}
           check={checkedFrom}
           changeCheck={changFromChecked}
+          getMaterialList={materialList}
         />
       ),
     },
@@ -344,6 +369,7 @@ export default function Detail() {
           setDataForm={dataForm}
           check={checkedFrom}
           changeCheck={changFromChecked}
+          getVehiclesList={vehiclesList}
         />
       ),
     },
@@ -353,54 +379,61 @@ export default function Detail() {
       <div className="detail-warp-header">
         <Header />
       </div>
-      <div className="detail-warp-body">
-        <div className="body-breadcrumb">
-          <Breadcrumb
-            items={[
-              {
-                title: <Link to={"/index"}>项目管理</Link>,
-              },
-              {
-                title: "审核资料",
-              },
-            ]}
-          />
+      <Spin
+        style={{ maxHeight: "800px" }}
+        spinning={isLoading}
+        tip="数据加载中..."
+        size="large"
+      >
+        <div className="detail-warp-body">
+          <div className="body-breadcrumb">
+            <Breadcrumb
+              items={[
+                {
+                  title: <Link to={"/index"}>项目管理</Link>,
+                },
+                {
+                  title: "审核资料",
+                },
+              ]}
+            />
+          </div>
+          <div className="body-top">
+            <div className="body-top-title">{goodsInfo.projectName}</div>
+            <Row className="body-top-txt" gutter={24}>
+              <Col span={6}>项目编码：{goodsInfo.projectNumber}</Col>
+              <Col span={6}>品牌：{goodsInfo.brandName}</Col>
+              <Col span={6}>展位号：{goodsInfo.boothNumber}</Col>
+              <Col span={6}>背景*纵深：{goodsInfo.boothSize}</Col>
+              <Col span={6}>施工总负责人姓名：{goodsInfo.chargePersonName}</Col>
+              <Col span={6}>
+                施工总负责人联系方式：{goodsInfo.chargePersonPhone}
+              </Col>
+              <Col span={6}>开始日期：{goodsInfo.startDate}</Col>
+              <Col span={6}>结束日期：{goodsInfo.endDate}</Col>
+            </Row>
+          </div>
+          <div className="body-content">
+            <Tabs activeKey={currIndex} items={items} onChange={onTabChange} />
+          </div>
+          <div className="body-bottom">
+            <Space size="small">
+              <Button disabled={goodsInfo.auditStatus !== "0"} onClick={onSave}>
+                保存
+              </Button>
+              <Button
+                disabled={
+                  goodsInfo.auditStatus !== "0" && goodsInfo.auditStatus !== "2"
+                }
+                onClick={onSubmit}
+                type="primary"
+              >
+                提交
+              </Button>
+            </Space>
+          </div>
         </div>
-        <div className="body-top">
-          <div className="body-top-title">{goodsInfo.projectName}</div>
-          <Row className="body-top-txt" gutter={24}>
-            <Col span={6}>项目编码：{goodsInfo.projectNumber}</Col>
-            <Col span={6}>品牌：{goodsInfo.brandName}</Col>
-            <Col span={6}>展位号：{goodsInfo.boothNumber}</Col>
-            <Col span={6}>背景*纵深：{goodsInfo.boothSize}</Col>
-            <Col span={6}>施工总负责人姓名：{goodsInfo.chargePersonName}</Col>
-            <Col span={6}>
-              施工总负责人联系方式：{goodsInfo.chargePersonPhone}
-            </Col>
-            <Col span={6}>开始日期：{goodsInfo.startDate}</Col>
-            <Col span={6}>结束日期：{goodsInfo.endDate}</Col>
-          </Row>
-        </div>
-        <div className="body-content">
-          <Tabs activeKey={currIndex} items={items} onChange={onTabChange} />
-        </div>
-        <div className="body-bottom">
-          <Space size="small">
-            <Button disabled={goodsInfo.auditStatus !== "0"} onClick={onSave}>
-              保存
-            </Button>
-            <Button
-              disabled={
-                goodsInfo.auditStatus !== "0" && goodsInfo.auditStatus !== "2"
-              }
-              onClick={onSubmit}
-              type="primary"
-            >
-              提交
-            </Button>
-          </Space>
-        </div>
-      </div>
+      </Spin>
     </div>
   );
 }

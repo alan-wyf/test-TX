@@ -43,10 +43,14 @@ export default function Prove(props) {
           dataForm.relevantQualificationsVO[i] !== null &&
           typeof dataForm.relevantQualificationsVO[i] === "object"
         ) {
+          const newList = [];
           for (const item of dataForm.relevantQualificationsVO[i]) {
             item.uid = item.id;
             item.status = "done";
+            if (JSON.stringify(newList).indexOf(item.uid) === -1)
+              newList.push(item);
           }
+          dataForm.relevantQualificationsVO[i] = newList;
         }
       }
       proveForm.setFieldsValue(dataForm.relevantQualificationsVO);
@@ -89,13 +93,15 @@ export default function Prove(props) {
             }
             const uploadData = item.response.data;
             uploadData.uid = uploadData.id;
-            if(JSON.stringify(list).indexOf(uploadData.uid) === -1) list.push(uploadData);
+            if (JSON.stringify(list).indexOf(uploadData.uid) === -1)
+              list.push(uploadData);
           } else {
-            if(JSON.stringify(list).indexOf(item.uid) === -1) list.push(item);
+            if (JSON.stringify(list).indexOf(item.uid) === -1) list.push(item);
           }
-          const newList = []
-          for(const item of proveForm.getFieldValue(name)){
-            if(JSON.stringify(newList).indexOf(item.uid) === -1) newList.push(item);
+          const newList = [];
+          for (const item of proveForm.getFieldValue(name)) {
+            if (JSON.stringify(newList).indexOf(item.uid) === -1)
+              newList.push(item);
           }
           proveForm.setFieldValue(name, newList);
           onValuesChange();

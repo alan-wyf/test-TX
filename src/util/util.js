@@ -132,7 +132,7 @@ export function checkedProveForm(form) {
 /** 校验现场收费表单 */
 export function checkedCostForm(form) {
   if (form === null) return false
-  if (!form.collectFeeDTOList.length) return false
+  if (form.collectFeeDTOList === null) return false
   let isOk = true
   for (const item of form.collectFeeDTOList) {
     if (!item.materialName) isOk = false

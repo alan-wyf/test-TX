@@ -95,7 +95,7 @@ const EditableCell = ({
     });
   };
 
-  const save = async (type) => {
+  const save = async () => {
     try {
       const values = await form.validateFields();
       if (dataIndex === "materialName") {
@@ -281,7 +281,7 @@ export default function Cost(props) {
   const [dueDeposit, setDueDeposit] = useState(0);
   const [dataSource, setDataSource] = useState([]);
   const [count, setCount] = useState(0);
-  const [materialList, setMaterialList] = useState([]);
+  const materialList = props.getMaterialList;
   const dataForm = props.setDataForm;
   const setData = () => {
     if (
@@ -311,8 +311,8 @@ export default function Cost(props) {
         dueFee += dataSubmitSource[i].totalCost;
         dueDeposit += dataSubmitSource[i].totalDepositAmount;
         if (
-          typeof dataSubmitSource[i].materialName === "string" &&
-          dataSubmitSource[i].materialName === null
+          typeof dataSubmitSource[i].materialName === "string" ||
+          dataSubmitSource[i].materialName === null || !dataSubmitSource[i].materialName
         )
           continue;
         dataSubmitSource[i].materialName = dataSubmitSource[i].materialName.id;
@@ -341,7 +341,7 @@ export default function Cost(props) {
   };
   useEffect(() => {
     setData();
-  }, [props.setDataForm]);
+  }, [props.getMaterialList]);
 
   const checkedForm = () => {
     const data = dataSource.concat;
@@ -357,17 +357,17 @@ export default function Cost(props) {
     }
   }, [props.check]);
 
-  const handleMaterialList = async () => {
-    const data = goodsInfo.projectNumber;
-    if (!data) return;
-    const res = await getMaterialList(data);
-    if (res && res.code === 200) {
-      setMaterialList(res.data);
-    }
-  };
-  useEffect(() => {
-    handleMaterialList();
-  }, [goodsInfo]);
+  // const handleMaterialList = async () => {
+  //   const data = goodsInfo.projectNumber;
+  //   if (!data) return;
+  //   const res = await getMaterialList(data);
+  //   if (res && res.code === 200) {
+  //     setMaterialList(res.data);
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleMaterialList();
+  // }, [goodsInfo]);
   const handleDelete = (key) => {
     const newData = dataSource.filter((item) => item.key !== key);
     setDataSource(newData);
@@ -567,6 +567,7 @@ export default function Cost(props) {
     {
       title: "操作",
       dataIndex: "operation",
+      fixed: 'right',
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm
