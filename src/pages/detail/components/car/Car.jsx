@@ -238,7 +238,7 @@ export default function Car(props) {
     setDataSource([...vehicleAccessListVO]);
   };
   useEffect(() => {
-    if (dataForm.vehicleAccessVO !== null) setData();
+    setData();
   }, [props.setDataForm]);
 
   const checkedForm = () => {
@@ -431,7 +431,7 @@ export default function Car(props) {
     onFormChange();
   };
   const handleSave = (row) => {
-    console.log(row);
+    // console.log(row);
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
