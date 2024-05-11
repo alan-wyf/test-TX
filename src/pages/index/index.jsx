@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./index.css";
-import { Button, Input, Modal, Table, message } from "antd";
+import { Button, Input, Modal, Table, message, Tooltip } from "antd";
 import { postInviteCode, postProjectList } from "../../api/api";
 import { getBaseUrl } from "../../config";
 import Header from "../components/header/Header";
@@ -10,6 +10,7 @@ import Header from "../components/header/Header";
 const onloadFile = (url) => {
   let link = document.createElement("a");
   link.href = url;
+  // link.target = '_blank'
   link.click();
 };
 
@@ -80,16 +81,35 @@ const columns = [
             <Link to={`/detail?id=` + record.investmentExhibitionDetailNumber}>
               提交资料
             </Link>
-            <Button
-              type="link"
-              onClick={() =>
-                onloadFile(
-                  getBaseUrl().baseURL + `project/down/${record.projectNumber}`
-                )
-              }
-            >
-              报馆相关资料下载
-            </Button>
+            {record.hasAttachment ? (
+              <Button
+                type="link"
+                disabled={!record.hasAttachment}
+                onClick={() =>
+                  onloadFile(
+                    getBaseUrl().baseURL +
+                      `project/down/${record.projectNumber}`
+                  )
+                }
+              >
+                报馆相关资料下载
+              </Button>
+            ) : (
+              <Tooltip placement="top" title="本项目暂未添加报馆相关资料">
+                <Button
+                  type="link"
+                  disabled={!record.hasAttachment}
+                  onClick={() =>
+                    onloadFile(
+                      getBaseUrl().baseURL +
+                        `project/down/${record.projectNumber}`
+                    )
+                  }
+                >
+                  报馆相关资料下载
+                </Button>
+              </Tooltip>
+            )}
           </div>
         );
       } else {
@@ -98,16 +118,35 @@ const columns = [
             <Link to={`/detail?id=` + record.investmentExhibitionDetailNumber}>
               详情
             </Link>
-            <Button
-              type="link"
-              onClick={() =>
-                onloadFile(
-                  getBaseUrl().baseURL + `project/down/${record.projectNumber}`
-                )
-              }
-            >
-              报馆相关资料下载
-            </Button>
+            {record.hasAttachment ? (
+              <Button
+                type="link"
+                disabled={!record.hasAttachment}
+                onClick={() =>
+                  onloadFile(
+                    getBaseUrl().baseURL +
+                      `project/down/${record.projectNumber}`
+                  )
+                }
+              >
+                报馆相关资料下载
+              </Button>
+            ) : (
+              <Tooltip placement="top" title="本项目暂未添加报馆相关资料">
+                <Button
+                  type="link"
+                  disabled={!record.hasAttachment}
+                  onClick={() =>
+                    onloadFile(
+                      getBaseUrl().baseURL +
+                        `project/down/${record.projectNumber}`
+                    )
+                  }
+                >
+                  报馆相关资料下载
+                </Button>
+              </Tooltip>
+            )}
           </div>
         );
       }
@@ -116,6 +155,7 @@ const columns = [
 ];
 
 export default function Index() {
+  const navigate = useNavigate();
   const [addGoodsErrMsg, setAddGoodsErrMsg] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
@@ -273,6 +313,14 @@ export default function Index() {
               }}
               loading={loading}
               onChange={handleTableChange}
+              onRow={(record) => {
+                return {
+                  onClick: () =>
+                    navigate(
+                      `/detail?id=` + record.investmentExhibitionDetailNumber
+                    ), // 点击行
+                };
+              }}
             />
           </div>
         </div>
