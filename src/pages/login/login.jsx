@@ -212,17 +212,17 @@ export default function Login() {
             >
               <div className="form-flex-item">
                 <Input className="form-input" placeholder="请输入手机号" />
-                <Button
+                {/* <Button
                   disabled={isDisabledVerifyBtn}
                   className="form-btn"
                   onClick={onCheckPhone}
                 >
                   {verifyBtnMsg}
-                </Button>
+                </Button> */}
               </div>
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               label=""
               name="verifyCode"
               rules={[
@@ -233,7 +233,7 @@ export default function Login() {
               ]}
             >
               <Input className="form-input" placeholder="请输入验证码" />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               label=""

@@ -46,7 +46,10 @@
 }
 .login-warp .login-warp-right .form-warp .form-flex-item .form-input {
   flex: 1;
-  margin-right: 20px;
+}
+.login-warp .login-warp-right .form-warp .form-flex-item .form-btn {
+  flex: 1;
+  margin-left: 20px;
 }
 .login-warp .login-warp-right .form-warp .form-input {
   background-color: #f5f6f7;
