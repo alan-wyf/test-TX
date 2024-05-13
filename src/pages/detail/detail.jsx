@@ -418,7 +418,12 @@ export default function Detail() {
           </div>
           <div className="body-bottom">
             <Space size="small">
-              <Button disabled={goodsInfo.auditStatus !== "0"} onClick={onSave}>
+              <Button
+                disabled={
+                  goodsInfo.auditStatus !== "0" && goodsInfo.auditStatus !== "2"
+                }
+                onClick={onSave}
+              >
                 保存
               </Button>
               <Button

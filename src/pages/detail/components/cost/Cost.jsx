@@ -312,7 +312,8 @@ export default function Cost(props) {
         dueDeposit += dataSubmitSource[i].totalDepositAmount;
         if (
           typeof dataSubmitSource[i].materialName === "string" ||
-          dataSubmitSource[i].materialName === null || !dataSubmitSource[i].materialName
+          dataSubmitSource[i].materialName === null ||
+          !dataSubmitSource[i].materialName
         )
           continue;
         dataSubmitSource[i].materialName = dataSubmitSource[i].materialName.id;
@@ -567,7 +568,7 @@ export default function Cost(props) {
     {
       title: "操作",
       dataIndex: "operation",
-      fixed: 'right',
+      fixed: "right",
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm
@@ -890,13 +891,17 @@ export default function Cost(props) {
         <Col span={12}>应收费用：{dueFee}</Col>
         <Col span={12}>应收押金：{dueDeposit}</Col>
         <Col span={24}>
-          {goodsInfo.auditStatus !== "0" ||
-          (dataForm.collectFeeVO !== null &&
+          {goodsInfo.auditStatus === "1" ||
+          goodsInfo.auditStatus === "3" ||
+          (goodsInfo.auditStatus === "2" &&
+            dataForm.collectFeeVO !== null &&
             dataForm.collectFeeVO.approvalStatus === "approve") ? (
             <Form
               disabled={
-                goodsInfo.auditStatus !== "0" ||
-                (dataForm.collectFeeVO !== null &&
+                goodsInfo.auditStatus === "1" ||
+                goodsInfo.auditStatus === "3" ||
+                (goodsInfo.auditStatus === "2" &&
+                  dataForm.collectFeeVO !== null &&
                   dataForm.collectFeeVO.approvalStatus === "approve")
               }
               layout="vertical"

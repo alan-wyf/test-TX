@@ -471,8 +471,10 @@ export default function Car(props) {
   };
   return (
     <div className="car-warp">
-      {goodsInfo.auditStatus !== "0" ||
-      (dataForm.vehicleAccessVO !== null &&
+      {goodsInfo.auditStatus === "1" ||
+      goodsInfo.auditStatus === "3" ||
+      (goodsInfo.auditStatus === "2" &&
+        dataForm.vehicleAccessVO !== null &&
         dataForm.vehicleAccessVO.approvalStatus === "approve") ? (
         <div>
           <Table
