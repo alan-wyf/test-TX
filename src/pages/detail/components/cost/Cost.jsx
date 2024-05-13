@@ -13,6 +13,7 @@ import {
   Upload,
   Popconfirm,
   message,
+  Tooltip,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import {
@@ -148,7 +149,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `物料名称不能为空`,
               },
             ]}
           >
@@ -159,6 +160,16 @@ const EditableCell = ({
               onBlur={() => save("materialName")}
               options={options}
               fieldNames={materialFieldNames}
+              optionRender={(option) => (
+                <div>
+                  <Tooltip placement="top" title={option.data.materialName}>
+                    <div>{option.data.materialName}</div>
+                  </Tooltip>
+                  <Tooltip placement="bottom" title={option.data.assembleText}>
+                    <div className="select-tip">{option.data.assembleText}</div>
+                  </Tooltip>
+                </div>
+              )}
             />
           </Form.Item>
         ) : (
@@ -454,6 +465,16 @@ export default function Cost(props) {
           value={record.materialName}
           options={materialList}
           fieldNames={materialFieldNames}
+          optionRender={(option) => (
+            <div>
+              <Tooltip placement="top" title={option.data.materialName}>
+                <div>{option.data.materialName}</div>
+              </Tooltip>
+              <Tooltip placement="bottom" title={option.data.assembleText}>
+                <div className="select-tip">{option.data.assembleText}</div>
+              </Tooltip>
+            </div>
+          )}
         />
       ),
     },

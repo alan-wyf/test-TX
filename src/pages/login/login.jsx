@@ -163,14 +163,14 @@ export default function Login() {
               </Button>
             </Form.Item>
             <Form.Item>
-              <Button
+              {/* <Button
                 className="link-btn"
                 type="link"
                 onClick={onUpdateClick}
                 htmlType="reset"
               >
                 修改密码
-              </Button>
+              </Button> */}
               <span className="form-tip">没有账号？</span>
               <Button
                 className="link-btn"

@@ -48,6 +48,7 @@ export default function Detail() {
   const [carForm, setCarForm] = useState(null);
   const [materialList, setMaterialList] = useState([]);
   const [vehiclesList, setVehiclesList] = useState([]);
+  const [loadingMsg, setLoadingMsg] = useState("数据加载中...");
   const [goodsInfo, setGoodsInfo] = useState({
     projectName: "",
     brandName: "",
@@ -152,31 +153,35 @@ export default function Detail() {
     setCarForm(e);
   };
   const onSave = async () => {
+    setLoadingMsg("信息保存中...");
+    setIsLoading(true);
     // console.log("infoForm", infoForm);
     // console.log("proveForm", proveForm);
     // console.log("costForm", costForm);
     // console.log("carForm", carForm);
+    const _costForm = JSON.parse(JSON.stringify(costForm));
+
     if (costForm !== null) {
       const collectFeeDTOList = JSON.parse(
-        JSON.stringify(costForm.collectFeeDTOList)
+        JSON.stringify(_costForm.collectFeeDTOList)
       );
-      for (const item in costForm.collectFeeDTOList) {
-        if (typeof costForm.collectFeeDTOList[item].startTime === "object") {
-          costForm.collectFeeDTOList[item].startTime = dayjs(
-            costForm.collectFeeDTOList[item].startTime
+      for (const item in _costForm.collectFeeDTOList) {
+        if (typeof _costForm.collectFeeDTOList[item].startTime === "object") {
+          _costForm.collectFeeDTOList[item].startTime = dayjs(
+            _costForm.collectFeeDTOList[item].startTime
           ).format("YYYY-MM-DD hh:mm");
         }
-        if (typeof costForm.collectFeeDTOList[item].endTime === "object") {
-          costForm.collectFeeDTOList[item].endTime = dayjs(
-            costForm.collectFeeDTOList[item].endTime
+        if (typeof _costForm.collectFeeDTOList[item].endTime === "object") {
+          _costForm.collectFeeDTOList[item].endTime = dayjs(
+            _costForm.collectFeeDTOList[item].endTime
           ).format("YYYY-MM-DD hh:mm");
         }
-        if (typeof costForm.collectFeeDTOList[item].materialName === "object")
+        if (typeof _costForm.collectFeeDTOList[item].materialName === "object")
           continue;
         const materialName = {
           id: collectFeeDTOList[item].materialName,
         };
-        costForm.collectFeeDTOList[item].materialName = materialName;
+        _costForm.collectFeeDTOList[item].materialName = materialName;
       }
     }
     if (infoForm !== null) {
@@ -204,16 +209,23 @@ export default function Detail() {
       },
       totalDetails: {
         id: dataForm.collectFeeVO === null ? "" : dataForm.collectFeeVO.id,
-        ...costForm,
+        ..._costForm,
       },
       vehicleAccessDTOList: carForm,
     };
     const res = await postSave(data);
     if (res && res.code === 200) {
       message.success("保存成功");
+      setLoadingMsg("数据加载中...");
+      setIsLoading(false);
+    } else {
+      setLoadingMsg("数据加载中...");
+      setIsLoading(false);
     }
   };
   const onSubmit = async () => {
+    setLoadingMsg("信息提交中...");
+    setIsLoading(true);
     // console.log("infoForm", infoForm);
     // console.log("proveForm", proveForm);
     // console.log("costForm", costForm);
@@ -240,28 +252,29 @@ export default function Detail() {
       setCurrIndex("4");
       return;
     }
+    const _costForm = JSON.parse(JSON.stringify(costForm));
 
     if (costForm !== null) {
       const collectFeeDTOList = JSON.parse(
-        JSON.stringify(costForm.collectFeeDTOList)
+        JSON.stringify(_costForm.collectFeeDTOList)
       );
-      for (const item in costForm.collectFeeDTOList) {
-        if (typeof costForm.collectFeeDTOList[item].startTime === "object") {
-          costForm.collectFeeDTOList[item].startTime = dayjs(
-            costForm.collectFeeDTOList[item].startTime
+      for (const item in _costForm.collectFeeDTOList) {
+        if (typeof _costForm.collectFeeDTOList[item].startTime === "object") {
+          _costForm.collectFeeDTOList[item].startTime = dayjs(
+            _costForm.collectFeeDTOList[item].startTime
           ).format("YYYY-MM-DD hh:mm");
         }
-        if (typeof costForm.collectFeeDTOList[item].endTime === "object") {
-          costForm.collectFeeDTOList[item].endTime = dayjs(
-            costForm.collectFeeDTOList[item].endTime
+        if (typeof _costForm.collectFeeDTOList[item].endTime === "object") {
+          _costForm.collectFeeDTOList[item].endTime = dayjs(
+            _costForm.collectFeeDTOList[item].endTime
           ).format("YYYY-MM-DD hh:mm");
         }
-        if (typeof costForm.collectFeeDTOList[item].materialName === "object")
+        if (typeof _costForm.collectFeeDTOList[item].materialName === "object")
           continue;
         const materialName = {
           id: collectFeeDTOList[item].materialName,
         };
-        costForm.collectFeeDTOList[item].materialName = materialName;
+        _costForm.collectFeeDTOList[item].materialName = materialName;
       }
     }
     if (infoForm !== null) {
@@ -289,7 +302,7 @@ export default function Detail() {
       },
       totalDetails: {
         id: dataForm.collectFeeVO === null ? "" : dataForm.collectFeeVO.id,
-        ...costForm,
+        ..._costForm,
       },
       vehicleAccessDTOList: carForm,
     };
@@ -297,6 +310,11 @@ export default function Detail() {
     if (res && res.code === 200) {
       message.success("提交成功");
       getDetail();
+      setLoadingMsg("数据加载中...");
+      setIsLoading(false);
+    } else {
+      setLoadingMsg("数据加载中...");
+      setIsLoading(false);
     }
   };
   const changFromChecked = (from, status) => {
@@ -382,7 +400,7 @@ export default function Detail() {
       <Spin
         style={{ maxHeight: "800px" }}
         spinning={isLoading}
-        tip="数据加载中..."
+        tip={loadingMsg}
         size="large"
       >
         <div className="detail-warp-body">
