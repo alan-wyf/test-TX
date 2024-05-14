@@ -63,6 +63,7 @@ export default function Detail() {
     orderNumber: "",
     isInputVehicle: "",
     investmentExhibitionDetailNumber: "",
+    expirationDate: "",
   });
   const [checkedFrom, setCheckedFrom] = useState(false);
   const [currIndex, setCurrIndex] = useState("1");
@@ -76,6 +77,15 @@ export default function Detail() {
     if (id === "nodata") navigate("/index", { replace: true });
     const res = await getProjectDetail(id);
     if (res && res.code === 200) {
+      const nowDate = new Date().getTime();
+      if ("expirationDate" in res.data) {
+        if (!res.data.expirationDate)
+          res.data.expirationDate = "2024-05-15 12:00";
+        const expirationDate = new Date(res.data.expirationDate).getTime();
+        if (nowDate > expirationDate) {
+          res.data.auditStatus = "1";
+        }
+      }
       setGoodsInfo(res.data);
       if (res.data.projectNumber) handleMaterialList(res.data.projectNumber);
       if (res.data.orderNumber) {

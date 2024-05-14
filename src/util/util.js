@@ -140,7 +140,7 @@ export function checkedCostForm(form) {
     } else {
       if (!item.materialName) return false
     }
-    if (!item.quantity) return false
+    if (!item.quantity && item.quantity !== 0) return false
   }
   return isOk
 }
