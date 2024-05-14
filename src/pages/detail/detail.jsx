@@ -87,10 +87,10 @@ export default function Detail() {
         }
       }
       setGoodsInfo(res.data);
+      handleVehiclesList();
       if (res.data.projectNumber) handleMaterialList(res.data.projectNumber);
       if (res.data.orderNumber) {
         getData(res.data.orderNumber);
-        handleVehiclesList();
       } else {
         setIsLoading(false);
       }
