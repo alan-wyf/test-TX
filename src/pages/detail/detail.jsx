@@ -153,27 +153,24 @@ export default function Detail() {
     setCarForm(e);
   };
   const onSave = async () => {
-    setLoadingMsg("信息保存中...");
-    setIsLoading(true);
     // console.log("infoForm", infoForm);
     // console.log("proveForm", proveForm);
     // console.log("costForm", costForm);
     // console.log("carForm", carForm);
     const _costForm = JSON.parse(JSON.stringify(costForm));
-
     if (costForm !== null) {
       const collectFeeDTOList = JSON.parse(
         JSON.stringify(_costForm.collectFeeDTOList)
       );
       for (const item in _costForm.collectFeeDTOList) {
-        if (typeof _costForm.collectFeeDTOList[item].startTime === "object") {
+        if (typeof costForm.collectFeeDTOList[item].startTime === "object") {
           _costForm.collectFeeDTOList[item].startTime = dayjs(
-            _costForm.collectFeeDTOList[item].startTime
+            costForm.collectFeeDTOList[item].startTime
           ).format("YYYY-MM-DD hh:mm");
         }
-        if (typeof _costForm.collectFeeDTOList[item].endTime === "object") {
+        if (typeof costForm.collectFeeDTOList[item].endTime === "object") {
           _costForm.collectFeeDTOList[item].endTime = dayjs(
-            _costForm.collectFeeDTOList[item].endTime
+            costForm.collectFeeDTOList[item].endTime
           ).format("YYYY-MM-DD hh:mm");
         }
         if (typeof _costForm.collectFeeDTOList[item].materialName === "object")
@@ -213,8 +210,11 @@ export default function Detail() {
       },
       vehicleAccessDTOList: carForm,
     };
+    setLoadingMsg("信息保存中...");
+    setIsLoading(true);
     const res = await postSave(data);
     if (res && res.code === 200) {
+      getDetail();
       message.success("保存成功");
       setLoadingMsg("数据加载中...");
       setIsLoading(false);
@@ -224,14 +224,11 @@ export default function Detail() {
     }
   };
   const onSubmit = async () => {
-    setLoadingMsg("信息提交中...");
-    setIsLoading(true);
     // console.log("infoForm", infoForm);
     // console.log("proveForm", proveForm);
     // console.log("costForm", costForm);
     // console.log("carForm", carForm);
     setCheckedFrom(true);
-
     if (!checkedInfoForm(infoForm)) {
       message.error("当前表单有信息缺失，请检查");
       setCurrIndex("1");
@@ -253,20 +250,19 @@ export default function Detail() {
       return;
     }
     const _costForm = JSON.parse(JSON.stringify(costForm));
-
     if (costForm !== null) {
       const collectFeeDTOList = JSON.parse(
         JSON.stringify(_costForm.collectFeeDTOList)
       );
       for (const item in _costForm.collectFeeDTOList) {
-        if (typeof _costForm.collectFeeDTOList[item].startTime === "object") {
+        if (typeof costForm.collectFeeDTOList[item].startTime === "object") {
           _costForm.collectFeeDTOList[item].startTime = dayjs(
-            _costForm.collectFeeDTOList[item].startTime
+            costForm.collectFeeDTOList[item].startTime
           ).format("YYYY-MM-DD hh:mm");
         }
-        if (typeof _costForm.collectFeeDTOList[item].endTime === "object") {
+        if (typeof costForm.collectFeeDTOList[item].endTime === "object") {
           _costForm.collectFeeDTOList[item].endTime = dayjs(
-            _costForm.collectFeeDTOList[item].endTime
+            costForm.collectFeeDTOList[item].endTime
           ).format("YYYY-MM-DD hh:mm");
         }
         if (typeof _costForm.collectFeeDTOList[item].materialName === "object")
@@ -306,6 +302,8 @@ export default function Detail() {
       },
       vehicleAccessDTOList: carForm,
     };
+    setLoadingMsg("信息提交中...");
+    setIsLoading(true);
     const res = await postSubmit(data);
     if (res && res.code === 200) {
       message.success("提交成功");

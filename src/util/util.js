@@ -112,7 +112,7 @@ export function checkedInfoForm(form) {
   if (form === null) return false
   let isOk = true
   for (const i in form) {
-    if (form[i] === undefined || form[i] === "") isOk = false
+    if (form[i] === undefined || form[i] === "" || form[i] === null) isOk = false
   }
   return isOk
 }
@@ -135,8 +135,12 @@ export function checkedCostForm(form) {
   if (form.collectFeeDTOList === null) return false
   let isOk = true
   for (const item of form.collectFeeDTOList) {
-    if (!item.materialName) isOk = false
-    if (!item.quantity) isOk = false
+    if (typeof item.materialName === 'object') {
+      if (!item.materialName.id) return false
+    } else {
+      if (!item.materialName) return false
+    }
+    if (!item.quantity) return false
   }
   return isOk
 }
