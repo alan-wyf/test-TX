@@ -79,11 +79,14 @@ export default function Detail() {
     if (res && res.code === 200) {
       const nowDate = new Date().getTime();
       if ("expirationDate" in res.data) {
-        if (!res.data.expirationDate)
-          res.data.expirationDate = "2024-05-15 12:00";
-        const expirationDate = new Date(res.data.expirationDate).getTime();
-        if (nowDate > expirationDate) {
-          res.data.auditStatus = "1";
+        if (res.data.expirationDate) {
+          res.data.expirationDate = `${
+            res.data.expirationDate.split(":")[0]
+          }:00`;
+          const expirationDate = new Date(res.data.expirationDate).getTime();
+          if (nowDate > expirationDate) {
+            res.data.auditStatus = "1";
+          }
         }
       }
       setGoodsInfo(res.data);

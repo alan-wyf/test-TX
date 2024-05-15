@@ -139,10 +139,19 @@
   background-color: rgba(66, 71, 246, 0.1);
 }
 .success {
-  color: #1FC168;
-  background-color: #E8F8EF;
+  color: #1fc168;
+  background-color: #e8f8ef;
 }
 .fail {
-  color: #F0144A;
-  background-color: #FDE7EC;
+  color: #f0144a;
+  background-color: #fde7ec;
+}
+.index-warp
+  .index-warp-body
+  .body-content
+  .content-table
+  .ant-table-wrapper
+  .ant-table-container
+  .ant-btn {
+  padding-left: 0;
 }

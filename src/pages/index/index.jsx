@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { Button, Input, Modal, Table, message, Tooltip } from "antd";
 import { postInviteCode, postProjectList } from "../../api/api";
@@ -13,146 +13,6 @@ const onloadFile = (url) => {
   // link.target = '_blank'
   link.click();
 };
-
-const columns = [
-  {
-    title: "项目名称",
-    dataIndex: "projectName",
-    key: "projectName",
-    ellipsis: true,
-  },
-  {
-    title: "参展品牌",
-    dataIndex: "brandName",
-    key: "brandName",
-    ellipsis: true,
-  },
-  {
-    title: "项目编码",
-    dataIndex: "projectNumber",
-    key: "projectNumber",
-    ellipsis: true,
-  },
-  {
-    title: "开始日期",
-    dataIndex: "startDate",
-    key: "startDate",
-    ellipsis: true,
-  },
-  {
-    title: "结束日期",
-    dataIndex: "endDate",
-    key: "endDate",
-    ellipsis: true,
-  },
-  {
-    title: "项目状态",
-    key: "auditStatus",
-    dataIndex: "auditStatus",
-    render: (auditStatus) => {
-      switch (auditStatus) {
-        case "0":
-          return <div className="tag un-submit">资料未提交</div>;
-        case "1":
-          return <div className="tag submit">审核中</div>;
-        case "2":
-          return <div className="tag fail">被驳回</div>;
-        case "3":
-          return <div className="tag success">审核通过</div>;
-        default:
-          break;
-      }
-    },
-  },
-  {
-    title: "邀请码",
-    dataIndex: "invitationCode",
-    key: "invitationCode",
-    ellipsis: true,
-  },
-  {
-    title: "操作",
-    key: "action",
-    width: 240,
-    render: (_, record) => {
-      if (record.auditStatus === "0" || record.auditStatus === "2") {
-        return (
-          <div>
-            <Link to={`/detail?id=` + record.investmentExhibitionDetailNumber}>
-              提交资料
-            </Link>
-            {record.hasAttachment ? (
-              <Button
-                type="link"
-                disabled={!record.hasAttachment}
-                onClick={() =>
-                  onloadFile(
-                    getBaseUrl().baseURL +
-                      `project/down/${record.projectNumber}`
-                  )
-                }
-              >
-                报馆相关资料下载
-              </Button>
-            ) : (
-              <Tooltip placement="top" title="本项目暂未添加报馆相关资料">
-                <Button
-                  type="link"
-                  disabled={!record.hasAttachment}
-                  onClick={() =>
-                    onloadFile(
-                      getBaseUrl().baseURL +
-                        `project/down/${record.projectNumber}`
-                    )
-                  }
-                >
-                  报馆相关资料下载
-                </Button>
-              </Tooltip>
-            )}
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <Link to={`/detail?id=` + record.investmentExhibitionDetailNumber}>
-              详情
-            </Link>
-            {record.hasAttachment ? (
-              <Button
-                type="link"
-                disabled={!record.hasAttachment}
-                onClick={() =>
-                  onloadFile(
-                    getBaseUrl().baseURL +
-                      `project/down/${record.projectNumber}`
-                  )
-                }
-              >
-                报馆相关资料下载
-              </Button>
-            ) : (
-              <Tooltip placement="top" title="本项目暂未添加报馆相关资料">
-                <Button
-                  type="link"
-                  disabled={!record.hasAttachment}
-                  onClick={() =>
-                    onloadFile(
-                      getBaseUrl().baseURL +
-                        `project/down/${record.projectNumber}`
-                    )
-                  }
-                >
-                  报馆相关资料下载
-                </Button>
-              </Tooltip>
-            )}
-          </div>
-        );
-      }
-    },
-  },
-];
 
 export default function Index() {
   const navigate = useNavigate();
@@ -266,6 +126,164 @@ export default function Index() {
     setAddGoodsErrMsg("");
   };
 
+  const onDetailClick = (e, record) => {
+    e.stopPropagation();
+    if (!record.expirationDate) {
+      navigate(`/detail?id=` + record.investmentExhibitionDetailNumber);
+      return;
+    }
+    if (
+      new Date().getTime() > new Date(record.expirationDate).getTime() &&
+      (record.auditStatus === "0" || record.auditStatus === "2")
+    ) {
+      Modal.warning({
+        title: "报馆时间已截止，如有需求请与组委会工作人员联系",
+      });
+    } else {
+      navigate(`/detail?id=` + record.investmentExhibitionDetailNumber);
+    }
+  };
+
+  const columns = [
+    {
+      title: "项目名称",
+      dataIndex: "projectName",
+      key: "projectName",
+      ellipsis: true,
+    },
+    {
+      title: "参展品牌",
+      dataIndex: "brandName",
+      key: "brandName",
+      ellipsis: true,
+    },
+    {
+      title: "项目编码",
+      dataIndex: "projectNumber",
+      key: "projectNumber",
+      ellipsis: true,
+    },
+    {
+      title: "开始日期",
+      dataIndex: "startDate",
+      key: "startDate",
+      ellipsis: true,
+    },
+    {
+      title: "结束日期",
+      dataIndex: "endDate",
+      key: "endDate",
+      ellipsis: true,
+    },
+    {
+      title: "项目状态",
+      key: "auditStatus",
+      dataIndex: "auditStatus",
+      render: (auditStatus) => {
+        switch (auditStatus) {
+          case "0":
+            return <div className="tag un-submit">资料未提交</div>;
+          case "1":
+            return <div className="tag submit">审核中</div>;
+          case "2":
+            return <div className="tag fail">被驳回</div>;
+          case "3":
+            return <div className="tag success">审核通过</div>;
+          default:
+            break;
+        }
+      },
+    },
+    {
+      title: "邀请码",
+      dataIndex: "invitationCode",
+      key: "invitationCode",
+      ellipsis: true,
+    },
+    {
+      title: "操作",
+      key: "action",
+      width: 250,
+      render: (_, record) => {
+        if (record.auditStatus === "0" || record.auditStatus === "2") {
+          return (
+            <div>
+              <Button type="link" onClick={(e) => onDetailClick(e, record)}>
+                提交资料
+              </Button>
+              {record.hasAttachment ? (
+                <Button
+                  type="link"
+                  disabled={!record.hasAttachment}
+                  onClick={() =>
+                    onloadFile(
+                      getBaseUrl().baseURL +
+                        `project/down/${record.projectNumber}`
+                    )
+                  }
+                >
+                  报馆相关资料下载
+                </Button>
+              ) : (
+                <Tooltip placement="top" title="本项目暂未添加报馆相关资料">
+                  <Button
+                    type="link"
+                    disabled={!record.hasAttachment}
+                    onClick={() =>
+                      onloadFile(
+                        getBaseUrl().baseURL +
+                          `project/down/${record.projectNumber}`
+                      )
+                    }
+                  >
+                    报馆相关资料下载
+                  </Button>
+                </Tooltip>
+              )}
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <Button type="link" onClick={(e) => onDetailClick(e, record)}>
+                详情
+              </Button>
+              {record.hasAttachment ? (
+                <Button
+                  type="link"
+                  disabled={!record.hasAttachment}
+                  onClick={() =>
+                    onloadFile(
+                      getBaseUrl().baseURL +
+                        `project/down/${record.projectNumber}`
+                    )
+                  }
+                >
+                  报馆相关资料下载
+                </Button>
+              ) : (
+                <Tooltip placement="top" title="本项目暂未添加报馆相关资料">
+                  <Button
+                    type="link"
+                    disabled={!record.hasAttachment}
+                    onClick={() =>
+                      onloadFile(
+                        getBaseUrl().baseURL +
+                          `project/down/${record.projectNumber}`
+                      )
+                    }
+                  >
+                    报馆相关资料下载
+                  </Button>
+                </Tooltip>
+              )}
+            </div>
+          );
+        }
+      },
+    },
+  ];
+
   return (
     <div className="index-warp">
       <div className="index-warp-header">
@@ -315,10 +333,7 @@ export default function Index() {
               onChange={handleTableChange}
               onRow={(record) => {
                 return {
-                  onClick: () =>
-                    navigate(
-                      `/detail?id=` + record.investmentExhibitionDetailNumber
-                    ), // 点击行
+                  onClick: (e) => onDetailClick(e, record),
                 };
               }}
             />
