@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
-import { Button, Input, Modal, Table, message, Tooltip } from "antd";
+import { Button, Input, Modal, Table, message, Tooltip, Spin } from "antd";
 import { postInviteCode, postProjectList } from "../../api/api";
 import { getBaseUrl } from "../../config";
 import Header from "../components/header/Header";
@@ -16,6 +16,8 @@ const onloadFile = (url) => {
 
 export default function Index() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMsg, setLoadingMsg] = useState("邀请码验证中...");
   const [addGoodsErrMsg, setAddGoodsErrMsg] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
@@ -107,16 +109,20 @@ export default function Index() {
     if (!code.replace(/\s+/g, "")) {
       setAddGoodsErrMsg("邀请码不能为空");
     } else {
+      setIsLoading(true);
       const data = {
         invitationCode: code,
       };
       const res = await postInviteCode(data);
       if (res && res.code === 200) {
+        message.success("验证码添加成功");
         setIsAddModalOpen(false);
         setAddGoodsErrMsg("");
         fetchData();
+        setIsLoading(false);
       } else {
         setAddGoodsErrMsg(res.msg);
+        setIsLoading(false);
       }
     }
   };
@@ -350,14 +356,22 @@ export default function Index() {
         onCancel={handleAddCancel}
         width={420}
         destroyOnClose={true}
+        confirmLoading={isLoading}
       >
-        <p className="add-goods-label">展会邀请码</p>
-        <Input
-          className="add-goods-input"
-          placeholder="请输入"
-          onChange={onCodeChange}
-        />
-        <p className="add-goods-label add-err-tip">{addGoodsErrMsg}</p>
+        <Spin
+          style={{ maxHeight: "800px" }}
+          spinning={isLoading}
+          tip={loadingMsg}
+          size="large"
+        >
+          <p className="add-goods-label">展会邀请码</p>
+          <Input
+            className="add-goods-input"
+            placeholder="请输入"
+            onChange={onCodeChange}
+          />
+          <p className="add-goods-label add-err-tip">{addGoodsErrMsg}</p>
+        </Spin>
       </Modal>
     </div>
   );

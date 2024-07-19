@@ -270,12 +270,12 @@ export default function Car(props) {
   const handleDelete = (key) => {
     const newData = dataSource.filter((item) => item.key !== key);
     setDataSource(newData);
-    onFormChange();
+    onFormChange(newData);
   };
   const onLicensePlateNumberChange = (e, index) => {
     dataSource[index].licensePlateNumber = e.target.value;
     setDataSource([...dataSource]);
-    onFormChange();
+    onFormChange([...dataSource]);
   };
   const defaultColumns = [
     {
@@ -428,7 +428,7 @@ export default function Car(props) {
     };
     setDataSource([...dataSource, newData]);
     setCount(count + 1);
-    onFormChange();
+    onFormChange([...dataSource, newData]);
   };
   const handleSave = (row) => {
     // console.log(row);
@@ -440,7 +440,7 @@ export default function Car(props) {
       ...row,
     });
     setDataSource([...newData]);
-    onFormChange(newData);
+    onFormChange([...newData]);
   };
   const components = {
     body: {

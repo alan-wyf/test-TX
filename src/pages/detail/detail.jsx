@@ -97,6 +97,8 @@ export default function Detail() {
       } else {
         setIsLoading(false);
       }
+    }else{
+      setIsLoading(false);
     }
   };
   useEffect(() => {
