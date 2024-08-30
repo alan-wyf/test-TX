@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { Button, Input, Modal, Table, message, Tooltip, Spin } from "antd";
-import { postInviteCode, postProjectList } from "../../api/api";
+import {
+  postInviteCode,
+  postProjectList,
+  postInviteCodeBrandName,
+} from "../../api/api";
 import { getBaseUrl } from "../../config";
 import Header from "../components/header/Header";
 
@@ -23,6 +27,7 @@ export default function Index() {
   const [projectName, setProjectName] = useState("");
   const [projectNumber, setProjectNumber] = useState("");
   const [code, setCode] = useState(null);
+  const [brandName, setBrandName] = useState("--");
   const [data, setData] = useState({
     total: 0,
     list: [],
@@ -62,15 +67,34 @@ export default function Index() {
       });
   };
 
+  const checkedCode = async (value) => {
+    const data = {
+      invitationCode: value,
+    };
+    await postInviteCodeBrandName(data)
+      .then((res) => {
+        if (!res) {
+        } else {
+          if (res && res.code === 200) {
+            setData(res.data);
+            setBrandName(res.data);
+          }else{
+            setAddGoodsErrMsg(res.msg);
+          }
+        }
+      })
+      .catch((res) => {
+        console.log("err", res);
+      });
+  };
+
   useEffect(() => {
     fetchData();
   }, [
-    JSON.stringify(
       JSON.stringify({
         projectName: projectName,
         projectNumber: projectNumber,
-      })
-    ),
+    }),
   ]);
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -99,6 +123,8 @@ export default function Index() {
 
   const onCodeChange = (e) => {
     setCode(e.target.value);
+    if (e.target.value.replace(/\s+/g, "").length === 8)
+      checkedCode(e.target.value.replace(/\s+/g, ""));
   };
 
   const onAddModalOpen = () => {
@@ -174,12 +200,14 @@ export default function Index() {
       dataIndex: "startDate",
       key: "startDate",
       ellipsis: true,
+      render: (_) => _.split(" ")[0],
     },
     {
       title: "结束日期",
       dataIndex: "endDate",
       key: "endDate",
       ellipsis: true,
+      render: (_) => _.split(" ")[0],
     },
     {
       title: "项目状态",
@@ -364,13 +392,15 @@ export default function Index() {
           tip={loadingMsg}
           size="large"
         >
-          <p className="add-goods-label">展会邀请码</p>
+          <h className="add-goods-label">展会邀请码</h>
           <Input
             className="add-goods-input"
             placeholder="请输入"
             onChange={onCodeChange}
           />
           <p className="add-goods-label add-err-tip">{addGoodsErrMsg}</p>
+          <p className="add-goods-label">参展品牌</p>
+          <p className="add-goods-label">{brandName}</p>
         </Spin>
       </Modal>
     </div>

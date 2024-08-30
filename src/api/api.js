@@ -24,6 +24,32 @@ export function postLogin(data) {
   return post('user/login', data)
 }
 
+// 发送验证码
+export function postSendVerifyCode(data) {
+  // data = {
+  //   "phoneNumber": "110",
+  // }
+  return post('user/sendVerifyCode', data)
+}
+
+// 校验验证码
+export function postCheckVerifyCode(data) {
+  // data = {
+  //   "phoneNumber": "110",
+  //   "code": "123456"
+  // }
+  return post('user/checkVerifyCode', data)
+}
+
+// 重置密码
+export function postResetPassword(data) {
+  // data = {
+  //   "phoneNumber": "110",
+  //   "password": "123456"
+  // }
+  return post('user/resetPassword', data)
+}
+
 /**
  * 
  * 首页界面
@@ -36,6 +62,15 @@ export function postInviteCode(data) {
   //   "invitationCode": "110"
   // }
   return post('project/verifyInvitationCode', data)
+}
+
+
+// 8. 邀请码查询参展品牌
+export function postInviteCodeBrandName(data) {
+  // data = {
+  //   "invitationCode": "110"
+  // }
+  return post('project/invitationCodeBrandName', data)
 }
 
 // 获取项目列表

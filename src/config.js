@@ -4,7 +4,7 @@ import { message } from 'antd'
 
 let baseUrl = 'http://120.78.191.169:8088/' // 线上
 
-// baseUrl = 'http://192.168.110.226:8088/' // 双全-本地环境
+// baseUrl = 'http://192.168.110.228:8088/' // 双全-本地环境
 
 // baseUrl = 'http://192.168.110.206:8088/' // 任其-本地环境
 
@@ -46,10 +46,15 @@ axios.interceptors.response.use(
     }
 
     if (code !== 200) {
-      if (response.config.url.indexOf('project/verifyInvitationCode') === -1) message.error(response.data.msg)
-      response.ok = false
-      response.data.code = "报错啦"
-      return response.data
+      if (response.config.url.indexOf('project/verifyInvitationCode') !== -1 || response.config.url.indexOf('project/invitationCodeBrandName') !== -1) {
+        return response.data
+      } else {
+        message.error(response.data.msg)
+        response.ok = false
+        response.data.code = "报错啦"
+        return response.data
+      }
+
     }
     return response.data
   },

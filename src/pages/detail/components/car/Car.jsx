@@ -11,6 +11,7 @@ import {
   InputNumber,
   Popconfirm,
   DatePicker,
+  Radio,
 } from "antd";
 import { getVehiclesList } from "../../../../api/api";
 import { approvalStatusToChinese } from "../../../../util/util";
@@ -187,6 +188,40 @@ const EditableCell = ({
           </div>
         );
         break;
+      case "radio":
+        childNode = editing ? (
+          <Form.Item
+            style={{
+              margin: 0,
+            }}
+            name={dataIndex}
+            rules={[
+              {
+                required: true,
+                message: `${title}不能为空`,
+              },
+            ]}
+          >
+            <Select
+              value={children}
+              ref={selectRef}
+              onChange={save}
+              options={options}
+              fieldNames={vehiclesFieldNames}
+            />
+          </Form.Item>
+        ) : (
+          <div
+            className="editable-cell-value-wrap"
+            style={{
+              paddingRight: 24,
+            }}
+            onClick={toggleEdit}
+          >
+            {children}
+          </div>
+        );
+        break;
       default:
         childNode = editing ? (
           <Form.Item
@@ -277,6 +312,11 @@ export default function Car(props) {
     setDataSource([...dataSource]);
     onFormChange([...dataSource]);
   };
+  const onMachineChange = (e, index) => {
+    dataSource[index].isMachine = e.target.value;
+    setDataSource([...dataSource]);
+    onFormChange([...dataSource]);
+  };
   const defaultColumns = [
     {
       title: (
@@ -310,29 +350,40 @@ export default function Car(props) {
       render: (_, record, index) => <InputNumber min={0} value={_} />,
     },
     {
-      title: (
-        <div>
-          自卸数量<span style={{ color: "red" }}>*</span>
-        </div>
+      title: <div>是否机械</div>,
+      width: 180,
+      dataIndex: "isMachine",
+      render: (_, record, index) => (
+        <Radio.Group onChange={(e) => onMachineChange(e, index)} value={_}>
+          <Radio value={0}>是</Radio>
+          <Radio value={1}>否</Radio>
+        </Radio.Group>
       ),
-      editable: true,
-      width: 150,
-      type: "num",
-      dataIndex: "unloadQuantity",
-      render: (_, record, index) => <InputNumber min={0} value={_} />,
     },
-    {
-      title: (
-        <div>
-          叉吊车卸货数量<span style={{ color: "red" }}>*</span>
-        </div>
-      ),
-      editable: true,
-      width: 150,
-      type: "num",
-      dataIndex: "forkliftUnloadQuantity",
-      render: (_, record, index) => <InputNumber min={0} value={_} />,
-    },
+    // {
+    //   title: (
+    //     <div>
+    //       自卸数量<span style={{ color: "red" }}>*</span>
+    //     </div>
+    //   ),
+    //   editable: true,
+    //   width: 150,
+    //   type: "num",
+    //   dataIndex: "unloadQuantity",
+    //   render: (_, record, index) => <InputNumber min={0} value={_} />,
+    // },
+    // {
+    //   title: (
+    //     <div>
+    //       叉吊车卸货数量<span style={{ color: "red" }}>*</span>
+    //     </div>
+    //   ),
+    //   editable: true,
+    //   width: 150,
+    //   type: "num",
+    //   dataIndex: "forkliftUnloadQuantity",
+    //   render: (_, record, index) => <InputNumber min={0} value={_} />,
+    // },
     {
       title: "车牌号",
       width: 230,
@@ -386,17 +437,29 @@ export default function Car(props) {
       dataIndex: "quantity",
     },
     {
-      title: "自卸数量",
+      title: "是否机械",
       width: 150,
-      type: "num",
       dataIndex: "unloadQuantity",
+      type: "radio",
+      render: (_) => (
+        <Radio.Group disabled={true} value={_}>
+          <Radio value={0}>是</Radio>
+          <Radio value={1}>否</Radio>
+        </Radio.Group>
+      ),
     },
-    {
-      title: "叉吊车卸货数量",
-      width: 150,
-      type: "num",
-      dataIndex: "forkliftUnloadQuantity",
-    },
+    // {
+    //   title: "自卸数量",
+    //   width: 150,
+    //   type: "num",
+    //   dataIndex: "unloadQuantity",
+    // },
+    // {
+    //   title: "叉吊车卸货数量",
+    //   width: 150,
+    //   type: "num",
+    //   dataIndex: "forkliftUnloadQuantity",
+    // },
     {
       title: "车牌号",
       width: 230,

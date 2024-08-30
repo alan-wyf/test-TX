@@ -1,3 +1,21 @@
+import CryptoJS  from "crypto-js"
+const secretKey = 'ias-builder-manage'
+
+/*
+加密
+*/
+export function encryptData(data) {
+  return CryptoJS.AES.encrypt(data, secretKey).toString();
+}
+
+/*
+解密
+*/
+export function decryptData(encryptedData) {
+  const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
+  return bytes.toString(CryptoJS.enc.Utf8);
+}
+
 /*
 获取url的参数
 */
@@ -160,6 +178,8 @@ export function checkedCarForm(form, goodsInfo) {
 
 // 为了让 import { xxx } from 'util' 生效
 export default {
+  encryptData,
+  decryptData,
   getUrlState,
   formatDateTime,
   timeStamp2Text,
