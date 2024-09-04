@@ -45,16 +45,12 @@ export default function Login() {
 
   /** 注册 */
   const onRegisterFinish = async (values) => {
-    setIsUpdatePWResult(true);
-    let timer = setTimeout(async () => {
-      clearTimeout(timer);
-      const res = await postRegister(values);
-      if (res && res.code === 200) {
-        localStorage.setItem("IASAccount", encryptData(JSON.stringify(values)));
-        localStorage.setItem("jwtIASToken", "Bearer " + res.data);
-        navigate("/index", { replace: true });
-      }
-    }, 3000);
+    const res = await postRegister(values);
+    if (res && res.code === 200) {
+      localStorage.setItem("IASAccount", encryptData(JSON.stringify(values)));
+      localStorage.setItem("jwtIASToken", "Bearer " + res.data);
+      navigate("/index", { replace: true });
+    }
   };
 
   /** 验证码 */

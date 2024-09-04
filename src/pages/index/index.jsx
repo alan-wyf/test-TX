@@ -11,7 +11,8 @@ import {
 import { getBaseUrl } from "../../config";
 import Header from "../components/header/Header";
 
-const onloadFile = (url) => {
+const onloadFile = (url, e) => {
+  e.stopPropagation();
   let link = document.createElement("a");
   link.href = url;
   // link.target = '_blank'
@@ -78,7 +79,7 @@ export default function Index() {
           if (res && res.code === 200) {
             setData(res.data);
             setBrandName(res.data);
-          }else{
+          } else {
             setAddGoodsErrMsg(res.msg);
           }
         }
@@ -91,9 +92,9 @@ export default function Index() {
   useEffect(() => {
     fetchData();
   }, [
-      JSON.stringify({
-        projectName: projectName,
-        projectNumber: projectNumber,
+    JSON.stringify({
+      projectName: projectName,
+      projectNumber: projectNumber,
     }),
   ]);
 
@@ -249,10 +250,11 @@ export default function Index() {
                 <Button
                   type="link"
                   disabled={!record.hasAttachment}
-                  onClick={() =>
+                  onClick={(e) =>
                     onloadFile(
                       getBaseUrl().baseURL +
-                        `project/down/${record.projectNumber}`
+                        `project/down/${record.projectNumber}`,
+                      e
                     )
                   }
                 >
@@ -263,10 +265,11 @@ export default function Index() {
                   <Button
                     type="link"
                     disabled={!record.hasAttachment}
-                    onClick={() =>
+                    onClick={(e) =>
                       onloadFile(
                         getBaseUrl().baseURL +
-                          `project/down/${record.projectNumber}`
+                          `project/down/${record.projectNumber}`,
+                        e
                       )
                     }
                   >
@@ -286,10 +289,11 @@ export default function Index() {
                 <Button
                   type="link"
                   disabled={!record.hasAttachment}
-                  onClick={() =>
+                  onClick={(e) =>
                     onloadFile(
                       getBaseUrl().baseURL +
-                        `project/down/${record.projectNumber}`
+                        `project/down/${record.projectNumber}`,
+                      e
                     )
                   }
                 >
@@ -300,10 +304,11 @@ export default function Index() {
                   <Button
                     type="link"
                     disabled={!record.hasAttachment}
-                    onClick={() =>
+                    onClick={(e) =>
                       onloadFile(
                         getBaseUrl().baseURL +
-                          `project/down/${record.projectNumber}`
+                          `project/down/${record.projectNumber}`,
+                        e
                       )
                     }
                   >
@@ -365,11 +370,11 @@ export default function Index() {
               }}
               loading={loading}
               onChange={handleTableChange}
-              onRow={(record) => {
-                return {
-                  onClick: (e) => onDetailClick(e, record),
-                };
-              }}
+              // onRow={(record) => {
+              //   return {
+              //     onClick: (e) => onDetailClick(e, record),
+              //   };
+              // }}
             />
           </div>
         </div>

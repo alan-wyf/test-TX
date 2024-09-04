@@ -284,6 +284,7 @@ const EditableCell = ({
   }
   return <td {...restProps}>{childNode}</td>;
 };
+
 export default function Cost(props) {
   const goodsInfo = props.goodsInfo;
   const [isShow, setIsShow] = useState(false);
@@ -353,7 +354,7 @@ export default function Cost(props) {
   };
   useEffect(() => {
     setData();
-  }, [props.getMaterialList]);
+  }, [JSON.stringify(props.getMaterialList)]);
 
   const checkedForm = () => {
     const data = dataSource.concat;
