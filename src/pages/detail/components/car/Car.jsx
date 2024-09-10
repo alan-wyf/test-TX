@@ -96,7 +96,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -130,7 +130,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -165,7 +165,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -198,7 +198,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -232,7 +232,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >

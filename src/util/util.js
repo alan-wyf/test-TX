@@ -1,4 +1,4 @@
-import CryptoJS  from "crypto-js"
+import CryptoJS from "crypto-js"
 const secretKey = 'ias-builder-manage'
 
 /*
@@ -127,30 +127,29 @@ export function hourTimeValue(startTime, endTime) {
 
 /** 校验基本信息表单 */
 export function checkedInfoForm(form) {
-  if (form === null) return false
+  if (!form) return false
   let isOk = true
   for (const i in form) {
-    if (form[i] === undefined || form[i] === "" || form[i] === null) isOk = false
+    if (!form[i]) isOk = false
   }
   return isOk
 }
 
 /** 校验相关资质表单 */
 export function checkedProveForm(form) {
-  if (form === null) return false
+  if (!form) return false
   let isOk = true
   for (const i in form) {
     if (i === "file1" || i === "otherFile" || i === "id" || i === "approvalDateTime" || i === "approvalOpinion" || i === "approvalStatus") continue
-    if (form[i] === undefined || form[i] === null) return false
-    if (form[i].length === 0) return false
+    if (!form[i] || !form[i].length) return false
   }
   return isOk
 }
 
 /** 校验现场收费表单 */
 export function checkedCostForm(form) {
-  if (form === null) return false
-  if (form.collectFeeDTOList === null) return false
+  if (!form === null) return false
+  if (!form.collectFeeDTOList || !form.collectFeeDTOList.length)  return false
   let isOk = true
   for (const item of form.collectFeeDTOList) {
     if (typeof item.materialName === 'object') {
@@ -166,8 +165,7 @@ export function checkedCostForm(form) {
 /** 校验车辆出入表单 */
 export function checkedCarForm(form, goodsInfo) {
   if (goodsInfo.isInputVehicle === "n") return true
-  if (form === null) return false
-  if (!form.length) return false
+  if (!form || !form.length) return false
   let isOk = true
   for (const i in form) {
     if (i === "licensePlateNumber") continue

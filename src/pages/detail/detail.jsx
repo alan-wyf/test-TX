@@ -16,6 +16,7 @@ import {
   checkedCostForm,
   checkedCarForm,
   getUrlState,
+  timeStamp2Text,
 } from "../../util/util";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -198,9 +199,10 @@ export default function Detail() {
     }
     if (infoForm !== null) {
       if (typeof infoForm.dateOfDischarge === "object") {
-        infoForm.dateOfDischarge = dayjs(infoForm.dateOfDischarge).format(
-          "YYYY-MM-DD"
-        );
+        // infoForm.dateOfDischarge = dayjs(infoForm.dateOfDischarge).format(
+        //   "YYYY-MM-DD"
+        // );
+        infoForm.dateOfDischarge = timeStamp2Text(new Date(`${infoForm.dateOfDischarge.$y}-${infoForm.dateOfDischarge.$M + 1}-${infoForm.dateOfDischarge.$D}`).getTime(), "yyyy-MM-dd")
       }
     }
     const data = {
@@ -271,14 +273,10 @@ export default function Detail() {
       );
       for (const item in _costForm.collectFeeDTOList) {
         if (typeof costForm.collectFeeDTOList[item].startTime === "object") {
-          _costForm.collectFeeDTOList[item].startTime = dayjs(
-            costForm.collectFeeDTOList[item].startTime
-          ).format("YYYY-MM-DD hh:mm");
+          _costForm.collectFeeDTOList[item].startTime = timeStamp2Text(new Date(`${costForm.collectFeeDTOList[item].startTime.$y}-${costForm.collectFeeDTOList[item].startTime.$M + 1}-${costForm.collectFeeDTOList[item].startTime.$D} ${costForm.collectFeeDTOList[item].startTime.$H}:${costForm.collectFeeDTOList[item].startTime.$m}:${costForm.collectFeeDTOList[item].startTime.$s}`).getTime(), "yyyy-MM-dd hh:mm")
         }
         if (typeof costForm.collectFeeDTOList[item].endTime === "object") {
-          _costForm.collectFeeDTOList[item].endTime = dayjs(
-            costForm.collectFeeDTOList[item].endTime
-          ).format("YYYY-MM-DD hh:mm");
+          _costForm.collectFeeDTOList[item].endTime = timeStamp2Text(new Date(`${costForm.collectFeeDTOList[item].endTime.$y}-${costForm.collectFeeDTOList[item].endTime.$M + 1}-${costForm.collectFeeDTOList[item].endTime.$D} ${costForm.collectFeeDTOList[item].endTime.$H}:${costForm.collectFeeDTOList[item].endTime.$m}:${costForm.collectFeeDTOList[item].endTime.$s}`).getTime(), "yyyy-MM-dd hh:mm")
         }
         if (typeof _costForm.collectFeeDTOList[item].materialName === "object")
           continue;
@@ -290,9 +288,7 @@ export default function Detail() {
     }
     if (infoForm !== null) {
       if (typeof infoForm.dateOfDischarge === "object") {
-        infoForm.dateOfDischarge = dayjs(infoForm.dateOfDischarge).format(
-          "YYYY-MM-DD"
-        );
+        infoForm.dateOfDischarge = timeStamp2Text(new Date(`${infoForm.dateOfDischarge.$y}-${infoForm.dateOfDischarge.$M + 1}-${infoForm.dateOfDischarge.$D}`).getTime(), "yyyy-MM-dd")
       }
     }
     const data = {

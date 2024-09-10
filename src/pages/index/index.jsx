@@ -22,7 +22,6 @@ const onloadFile = (url, e) => {
 export default function Index() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMsg, setLoadingMsg] = useState("邀请码验证中...");
   const [addGoodsErrMsg, setAddGoodsErrMsg] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
@@ -77,7 +76,6 @@ export default function Index() {
         if (!res) {
         } else {
           if (res && res.code === 200) {
-            setData(res.data);
             setBrandName(res.data);
           } else {
             setAddGoodsErrMsg(res.msg);
@@ -95,6 +93,7 @@ export default function Index() {
     JSON.stringify({
       projectName: projectName,
       projectNumber: projectNumber,
+      tableParams,
     }),
   ]);
 
@@ -110,7 +109,7 @@ export default function Index() {
       setData([]);
     }
   };
-  const handlePageChange = (page, e) => {
+  const handlePageChange = (page) => {
     tableParams.pagination.current = page;
     setTableParams(tableParams);
   };
@@ -157,6 +156,7 @@ export default function Index() {
   const handleAddCancel = () => {
     setIsAddModalOpen(false);
     setAddGoodsErrMsg("");
+    setBrandName("--");
   };
 
   const onDetailClick = (e, record) => {
@@ -190,26 +190,26 @@ export default function Index() {
       key: "brandName",
       ellipsis: true,
     },
-    {
-      title: "项目编码",
-      dataIndex: "projectNumber",
-      key: "projectNumber",
-      ellipsis: true,
-    },
-    {
-      title: "开始日期",
-      dataIndex: "startDate",
-      key: "startDate",
-      ellipsis: true,
-      render: (_) => _.split(" ")[0],
-    },
-    {
-      title: "结束日期",
-      dataIndex: "endDate",
-      key: "endDate",
-      ellipsis: true,
-      render: (_) => _.split(" ")[0],
-    },
+    // {
+    //   title: "项目编码",
+    //   dataIndex: "projectNumber",
+    //   key: "projectNumber",
+    //   ellipsis: true,
+    // },
+    // {
+    //   title: "开始日期",
+    //   dataIndex: "startDate",
+    //   key: "startDate",
+    //   ellipsis: true,
+    //   render: (_) => _.split(" ")[0],
+    // },
+    // {
+    //   title: "结束日期",
+    //   dataIndex: "endDate",
+    //   key: "endDate",
+    //   ellipsis: true,
+    //   render: (_) => _.split(" ")[0],
+    // },
     {
       title: "项目状态",
       key: "auditStatus",
@@ -229,12 +229,12 @@ export default function Index() {
         }
       },
     },
-    {
-      title: "邀请码",
-      dataIndex: "invitationCode",
-      key: "invitationCode",
-      ellipsis: true,
-    },
+    // {
+    //   title: "邀请码",
+    //   dataIndex: "invitationCode",
+    //   key: "invitationCode",
+    //   ellipsis: true,
+    // },
     {
       title: "操作",
       key: "action",
@@ -394,7 +394,7 @@ export default function Index() {
         <Spin
           style={{ maxHeight: "800px" }}
           spinning={isLoading}
-          tip={loadingMsg}
+          tip={"邀请码验证中..."}
           size="large"
         >
           <h className="add-goods-label">展会邀请码</h>

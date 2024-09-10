@@ -17,12 +17,15 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import {
-  getMaterialList,
   getMaterialInfo,
   postUpdateCollectFee,
 } from "../../../../api/api";
 import { getBaseUrl } from "../../../../config";
-import { hourTimeValue, approvalStatusToChinese } from "../../../../util/util";
+import {
+  hourTimeValue,
+  approvalStatusToChinese,
+  timeStamp2Text,
+} from "../../../../util/util";
 import "./Cost.css";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
@@ -117,7 +120,7 @@ const EditableCell = ({
         }
       } else if (dataIndex === "quantity") {
         values.totalCost =
-          Number(values.quantity) === 0 ? 1 : Number(values.quantity) *
+          Number(values.quantity) === 0 ? 0 : Number(values.quantity) *
           Number(record.unitPrice) *
           (Number(record.duration) ? Number(record.duration) : 1);
         toggleEdit();
@@ -149,7 +152,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `物料名称不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -194,7 +197,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -229,7 +232,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -262,7 +265,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `${title}不能为空`,
+                message: `不能为空`,
               },
             ]}
           >
@@ -295,6 +298,8 @@ export default function Cost(props) {
   const [count, setCount] = useState(0);
   const materialList = props.getMaterialList;
   const dataForm = props.setDataForm;
+  const [changeCostFormLoading, setChangeCostFormLoading] = useState(false);
+  const [changeCostFormDisable, setChangeCostFormDisable] = useState(false);
   const setData = () => {
     if (
       dataForm.collectFeeVO !== null &&
@@ -315,11 +320,13 @@ export default function Cost(props) {
           : "";
         dataSubmitSource[i].totalDepositAmount = dataSubmitSource[i].deposit;
         dataSubmitSource[i].totalCost =
-          Number(dataSubmitSource[i].quantity) === 0 ? 1 : Number(dataSubmitSource[i].quantity) *
-          Number(dataSubmitSource[i].unitPrice) *
-          (Number(dataSubmitSource[i].duration)
-            ? Number(dataSubmitSource[i].duration)
-            : 1);
+          Number(dataSubmitSource[i].quantity) === 0
+            ? 0
+            : Number(dataSubmitSource[i].quantity) *
+              Number(dataSubmitSource[i].unitPrice) *
+              (Number(dataSubmitSource[i].duration)
+                ? Number(dataSubmitSource[i].duration)
+                : 1);
         dueFee += dataSubmitSource[i].totalCost;
         dueDeposit += dataSubmitSource[i].totalDepositAmount;
         if (
@@ -415,11 +422,13 @@ export default function Cost(props) {
       dataSource[index].endTime
     );
     dataSource[index].totalCost =
-      Number(dataSource[index].quantity) === 0 ? 1 : Number(dataSource[index].quantity) *
-      Number(dataSource[index].unitPrice) *
-      (Number(dataSource[index].duration)
-        ? Number(dataSource[index].duration)
-        : 1);
+      Number(dataSource[index].quantity) === 0
+        ? 0
+        : Number(dataSource[index].quantity) *
+          Number(dataSource[index].unitPrice) *
+          (Number(dataSource[index].duration)
+            ? Number(dataSource[index].duration)
+            : 1);
     setDataSource([...dataSource]);
     onFormChange();
   };
@@ -799,8 +808,8 @@ export default function Cost(props) {
       dueFee += Number(item.totalCost);
       dueDeposit += Number(item.totalDepositAmount);
     }
-    if (dueFee) setDueFee(dueFee);
-    if (dueDeposit) setDueDeposit(dueDeposit);
+    if (dueFee === 0 ||dueFee) setDueFee(dueFee);
+    if (dueDeposit === 0 || dueDeposit) setDueDeposit(dueDeposit);
     onFormChange();
   };
   const onValuesChange = (value) => {
@@ -814,17 +823,39 @@ export default function Cost(props) {
     props.costForm(data);
   };
   const onChangCostForm = async () => {
-    const collectFeeDTOList = dataSource;
+    setChangeCostFormLoading(true);
+    const collectFeeDTOList = JSON.parse(JSON.stringify(dataSource));
+
     for (const item in collectFeeDTOList) {
       if (typeof collectFeeDTOList[item].startTime === "object") {
-        collectFeeDTOList[item].startTime = dayjs(
-          collectFeeDTOList[item].startTime
-        ).format("YYYY-MM-DD hh:mm");
+        collectFeeDTOList[item].startTime = `${
+          collectFeeDTOList[item].startTime.$y
+        }-${collectFeeDTOList[item].startTime.$M + 1}-${
+          collectFeeDTOList[item].startTime.$D + 1
+        } ${collectFeeDTOList[item].startTime.$H}:${
+          collectFeeDTOList[item].startTime.$m
+        }:${collectFeeDTOList[item].startTime.$s}`;
+      } else {
+        if (collectFeeDTOList[item].startTime) {
+          collectFeeDTOList[item].startTime = timeStamp2Text(
+            new Date(collectFeeDTOList[item].startTime).getTime()
+          );
+        }
       }
       if (typeof collectFeeDTOList[item].endTime === "object") {
-        collectFeeDTOList[item].endTime = dayjs(
-          collectFeeDTOList[item].endTime
-        ).format("YYYY-MM-DD hh:mm");
+        collectFeeDTOList[item].endTime = `${
+          collectFeeDTOList[item].endTime.$y
+        }-${collectFeeDTOList[item].endTime.$M + 1}-${
+          collectFeeDTOList[item].endTime.$D + 1
+        } ${collectFeeDTOList[item].endTime.$H}:${
+          collectFeeDTOList[item].endTime.$m
+        }:${collectFeeDTOList[item].endTime.$s}`;
+      } else {
+        if (collectFeeDTOList[item].endTime) {
+          collectFeeDTOList[item].endTime = timeStamp2Text(
+            new Date(collectFeeDTOList[item].endTime).getTime()
+          );
+        }
       }
       if (typeof collectFeeDTOList[item].materialName === "object") continue;
       const materialName = {
@@ -845,6 +876,8 @@ export default function Cost(props) {
     };
     const res = await postUpdateCollectFee(data);
     if (res && res.code === 200) {
+      setChangeCostFormLoading(false);
+      setChangeCostFormDisable(true);
       message.success("提交成功");
     }
   };
@@ -894,7 +927,7 @@ export default function Cost(props) {
         rowClassName={() => "editable-row"}
         bordered
         dataSource={dataSource}
-        columns={goodsInfo.auditStatus === "1" ? submitColumns : columns}
+        columns={goodsInfo.auditStatus === "1" && !changeCostFormDisable ? submitColumns : columns}
         scroll={{
           x: 2300,
         }}
@@ -990,7 +1023,12 @@ export default function Cost(props) {
 
           {goodsInfo.auditStatus === "3" ? (
             <Form.Item style={{ textAlign: "right" }}>
-              <Button onClick={onChangCostForm} type="primary">
+              <Button
+                onClick={onChangCostForm}
+                disabled={changeCostFormDisable}
+                loading={changeCostFormLoading}
+                type="primary"
+              >
                 提交变更
               </Button>
             </Form.Item>

@@ -54,6 +54,10 @@
   flex: 1;
   height: 100%;
 }
+.index-warp .index-warp-body .ant-table-wrapper .ant-table{
+  height: calc(100vh - 300px);
+  overflow-y: auto;
+}
 .index-warp
   .index-warp-body
   .body-content
