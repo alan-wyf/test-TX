@@ -231,7 +231,6 @@ export default function Detail() {
     setIsLoading(true);
     const res = await postSave(data);
     if (res && res.code === 200) {
-      getDetail();
       message.success("保存成功");
       setLoadingMsg("数据加载中...");
       setIsLoading(false);
@@ -320,7 +319,7 @@ export default function Detail() {
       message.success("提交成功");
       getDetail();
       setLoadingMsg("数据加载中...");
-      setIsLoading(false);
+      // setIsLoading(false);
     } else {
       setLoadingMsg("数据加载中...");
       setIsLoading(false);
