@@ -35,7 +35,8 @@ dayjs.locale("zh-cn");
 export default function Detail() {
   const navigate = useNavigate();
   let state = getUrlState();
-  const id = "id" in state ? state.id : "nodata";
+  // const id = "id" in state ? state.id : "nodata";
+  const invitationCode = "code" in state ? state.code : "nodata";
   const [dataForm, setDataForm] = useState({
     baseInfoVO: null,
     relevantQualificationsVO: null,
@@ -75,8 +76,8 @@ export default function Detail() {
     carForm: false,
   });
   const getDetail = async () => {
-    if (id === "nodata") navigate("/index", { replace: true });
-    const res = await getProjectDetail(id);
+    if (invitationCode === "nodata") navigate("/index", { replace: true });
+    const res = await getProjectDetail(invitationCode);
     if (res && res.code === 200) {
       const nowDate = new Date().getTime();
       if ("expirationDate" in res.data) {
@@ -206,6 +207,7 @@ export default function Detail() {
       }
     }
     const data = {
+      invitationCode,
       baseInfoDTO: {
         investmentExhibitionDetailNumber:
           goodsInfo.investmentExhibitionDetailNumber,
@@ -291,6 +293,7 @@ export default function Detail() {
       }
     }
     const data = {
+      invitationCode,
       baseInfoDTO: {
         investmentExhibitionDetailNumber:
           goodsInfo.investmentExhibitionDetailNumber,

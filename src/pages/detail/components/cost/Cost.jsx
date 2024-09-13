@@ -120,8 +120,7 @@ const EditableCell = ({
         }
       } else if (dataIndex === "quantity") {
         values.totalCost =
-          Number(values.quantity) === 0 ? Number(record.unitPrice) *
-          (Number(record.duration) ? Number(record.duration) : 1) : Number(values.quantity) *
+          Number(values.quantity) === 0 ? 0 : Number(values.quantity) *
           Number(record.unitPrice) *
           (Number(record.duration) ? Number(record.duration) : 1);
         toggleEdit();
@@ -322,10 +321,7 @@ export default function Cost(props) {
         dataSubmitSource[i].totalDepositAmount = dataSubmitSource[i].deposit;
         dataSubmitSource[i].totalCost =
           Number(dataSubmitSource[i].quantity) === 0
-            ? Number(dataSubmitSource[i].unitPrice) *
-            (Number(dataSubmitSource[i].duration)
-              ? Number(dataSubmitSource[i].duration)
-              : 1)
+            ? 0
             : Number(dataSubmitSource[i].quantity) *
               Number(dataSubmitSource[i].unitPrice) *
               (Number(dataSubmitSource[i].duration)
@@ -427,10 +423,7 @@ export default function Cost(props) {
     );
     dataSource[index].totalCost =
       Number(dataSource[index].quantity) === 0
-        ? Number(dataSource[index].unitPrice) *
-        (Number(dataSource[index].duration)
-          ? Number(dataSource[index].duration)
-          : 1)
+        ? 0
         : Number(dataSource[index].quantity) *
           Number(dataSource[index].unitPrice) *
           (Number(dataSource[index].duration)

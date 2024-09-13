@@ -162,7 +162,7 @@ export default function Index() {
   const onDetailClick = (e, record) => {
     e.stopPropagation();
     if (!record.expirationDate) {
-      navigate(`/detail?id=` + record.investmentExhibitionDetailNumber);
+      navigate(`/detail?code=${record.invitationCode}`);
       return;
     }
     if (
@@ -173,7 +173,7 @@ export default function Index() {
         title: "报馆时间已截止，如有需求请与组委会工作人员联系",
       });
     } else {
-      navigate(`/detail?id=` + record.investmentExhibitionDetailNumber);
+      navigate(`/detail?code=${record.invitationCode}`);
     }
   };
 
