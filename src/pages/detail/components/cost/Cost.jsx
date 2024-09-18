@@ -1021,7 +1021,7 @@ export default function Cost(props) {
             </Form>
           )}
 
-          {goodsInfo.auditStatus === "3" ? (
+          {goodsInfo.auditStatus === "1" ? (
             <Form.Item style={{ textAlign: "right" }}>
               <Button
                 onClick={onChangCostForm}
