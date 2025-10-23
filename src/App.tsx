@@ -9,7 +9,6 @@ function App() {
         <Route path='/' element={<Index />}></Route>
       </Routes>
     </BrowserRouter>
-
   );
 }
 
